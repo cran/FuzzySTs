@@ -450,6 +450,7 @@ Fuzzy.CI.test.mean <- function(data.fuzzified, type, H0, H1, s.d, sig, distribut
 #' @param sigma if the standard deviation of the normal distribution is known, sigma should be a numerical value. Otherwise, the argument sigma is fixed to NA.
 #' @param sig a numerical value representing the significance level of the test. 
 #' @param distribution a distribution chosen between "normal", "poisson", "Student" or "Logistic".
+#' @param coef.boot a decimal representing the 1-sig-quantile of the bootstrap distribution of LR.
 #' @param distance.type type of distance chosen from the family of distances. The different choices are given by: "Rho1", "Rho2", "Bertoluzza", "Rhop", "Delta.pq", "Mid/Spr", "wabl", "DSGD", "DSGD.G", "GSGD".
 #' @param i parameter of the density function of the Beta distribution, fixed by default to i = 1.
 #' @param j parameter of the density function of the Beta distribution, fixed by default to j = 1.
@@ -475,12 +476,13 @@ Fuzzy.CI.test.mean <- function(data.fuzzified, type, H0, H1, s.d, sig, distribut
 #' H1 <- TriangularFuzzyNumber(2.5,2.5,5)
 # #' emp.dist <- boot.mean.ml(data.fuzzified, algorithm = "algo1", distribution
 # #' = "normal", sig= 0.05, nsim = 5, sigma = 0.7888)
-# #' eta.boot <- quantile(emp.dist, probs = 95/100)
+# #' coef.boot <- quantile(emp.dist, probs = 95/100)
+#' coef.boot <- 3.494829
 #' (res <- Fuzzy.CI.ML.test(data.fuzzified, H0, H1, t = Fmean, sigma=0.7888,
-#' sig=0.05, distribution="normal", distance.type="GSGD"))
+#' coef.boot = coef.boot, sig=0.05, distribution="normal", distance.type="GSGD"))
 #' res$decision
 
-Fuzzy.CI.ML.test <- function(data.fuzzified, H0, H1, t, mu=NA, sigma=NA, sig, distribution, distance.type="DSGD", i=1, j=1, theta = 1/3, thetas=1, p=2, q=0.5, breakpoints=100, step = 0.05, margin = c(5,5), plot=TRUE)  {
+Fuzzy.CI.ML.test <- function(data.fuzzified, H0, H1, t, mu=NA, sigma=NA, sig, distribution, coef.boot, distance.type="DSGD", i=1, j=1, theta = 1/3, thetas=1, p=2, q=0.5, breakpoints=100, step = 0.05, margin = c(5,5), plot=TRUE)  {
   
   if (is.trfuzzification(data.fuzzified) == TRUE){
     data.fuzzified <- tr.gfuzz(data.fuzzified, breakpoints = breakpoints)
@@ -507,7 +509,7 @@ Fuzzy.CI.ML.test <- function(data.fuzzified, H0, H1, t, mu=NA, sigma=NA, sig, di
     
     if(is.alphacuts(t)==TRUE && is.alphacuts(H0)==TRUE){
       
-    result <- Fuzzy.decisions.ML(data.fuzzified = data.fuzzified, H0=H0, H1=H1, t=t, mu=mu, sigma=sigma, sig=sig, distribution=distribution, 
+    result <- Fuzzy.decisions.ML(data.fuzzified = data.fuzzified, H0=H0, H1=H1, t=t, coef.boot = coef.boot, mu=mu, sigma=sigma, sig=sig, distribution=distribution, 
                                  distance.type=distance.type, i=i, j=j, theta = theta, thetas= thetas, p=p, q=q, breakpoints=breakpoints, step = step, margin = margin, plot=FALSE)
     
     if (is.list(result) == FALSE){stop(result)}

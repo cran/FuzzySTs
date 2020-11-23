@@ -56,9 +56,9 @@ Fuzzy.decisions <- function(type, H0, H1, t, s.d, n, sig, distribution, distance
       err0 <- qt(1-sig/2, df= n - 1) * ( s.d/(n^0.5) )
     
       } else if (distribution == "poisson"){
-      # err <- qnorm(1 - core(sig)[1] ) * ( sqrt((s.d^2)/n) ) #???
+      # err <- qnorm(1 - core(sig)[1] ) * ( sqrt((s.d^2)/n) ) 
       err <- qnorm(1 - sig, mean = s.d^2, sd = s.d) * ( s.d/(n^0.5) )
-      # err0 <- qnorm(1 - sig/2 ) * ( sqrt((s.d^2)/n) ) #???
+      # err0 <- qnorm(1 - sig/2 ) * ( sqrt((s.d^2)/n) ) 
       err0 <- qnorm(1 - sig/2, mean = s.d^2, sd = s.d) * ( s.d/(n^0.5) )
     
     }else{

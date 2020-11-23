@@ -4,6 +4,7 @@
 #' @param H0 a trapezoidal or a triangular fuzzy number representing the fuzzy null hypothesis.
 #' @param H1 a trapezoidal or a triangular fuzzy number representing the fuzzy alternative hypothesis.
 #' @param t a given numerical or fuzzy type parameter of the distribution. 
+#' @param coef.boot a decimal representing the 1-sig-quantile of the bootstrap distribution of LR.
 #' @param mu if the mean of the normal distribution is known, mu should be a numerical value. Otherwise, the argument mu is fixed to NA.
 #' @param sigma if the standard deviation of the normal distribution is known, sigma should be a numerical value. Otherwise, the argument sigma is fixed to NA.
 #' @param sig a numerical value representing the significance level of the test. 
@@ -23,19 +24,23 @@
 #' @importFrom stats qnorm
 #' @importFrom stats lm
 #' @export
-#' @examples mat <- matrix(c(1,2,3,2,2,1),ncol=1)
+#' @examples data <- matrix(c(1,2,3,2,2,1,1,3,1,2),ncol=1) 
 #' MF111 <- TrapezoidalFuzzyNumber(0,1,1,2)
 #' MF112 <- TrapezoidalFuzzyNumber(1,2,2,3)
 #' MF113 <- TrapezoidalFuzzyNumber(2,3,3,4)
 #' PA11 <- c(1,2,3)
-#' data.fuzzified <- FUZZ(mat,mi=1,si=1,PA=PA11) 
+#' data.fuzzified <- FUZZ(data,mi=1,si=1,PA=PA11)
 #' H0 <- alphacut(TriangularFuzzyNumber(2.9,3,3.1), seq(0,1, 0.01))
 #' H1 <- alphacut(TriangularFuzzyNumber(3,3,5), seq(0,1,0.01))
 #' t <- alphacut(TriangularFuzzyNumber(0.8,1.80,2.80), seq(0,1,0.01))
-#' res <- Fuzzy.decisions.ML(data.fuzzified, H0, H1, t = t, sigma = 0.79, sig = 0.05,
-#' distribution = "normal", distance.type = "GSGD")
+# #' emp.dist <- boot.mean.ml(data.fuzzified, algorithm = "algo1", 
+# #' distribution = "normal", sig = 0.05, nsim = 5, sigma = 0.79)
+# #' coef.boot <- quantile(emp.dist,  probs = 95/100)
+#' coef.boot <- 3.470085
+#' res <- Fuzzy.decisions.ML(data.fuzzified, H0, H1, t = t, coef.boot = coef.boot, 
+#' sigma = 0.79, sig = 0.05, distribution = "normal", distance.type = "GSGD")
 
-Fuzzy.decisions.ML <- function(data.fuzzified, H0, H1, t, mu=NA, sigma=NA, sig, distribution, distance.type="DSGD", i=1, j=1, theta = 1/3,thetas=1, p=2, q=0.5, breakpoints=100, step = 0.05, margin = c(5,5), plot=FALSE){
+Fuzzy.decisions.ML <- function(data.fuzzified, H0, H1, t, coef.boot, mu=NA, sigma=NA, sig, distribution, distance.type="DSGD", i=1, j=1, theta = 1/3,thetas=1, p=2, q=0.5, breakpoints=100, step = 0.05, margin = c(5,5), plot=FALSE){
   
   alpha_L <- seq(0,1, 1/breakpoints)
   alpha_U <- seq(1,0, -1/breakpoints)
@@ -60,7 +65,7 @@ Fuzzy.decisions.ML <- function(data.fuzzified, H0, H1, t, mu=NA, sigma=NA, sig, 
       coreH0.1 <- H0[(breakpoints+1),1]
       
       # Construction of the two-sided fuzzy confidence interval numerically
-      FCI.ML <- fci.ml(data.fuzzified=data.fuzzified, t=t, distribution=distribution, sig=sig, mu=mu, sigma=sigma, step = step, margin = margin, breakpoints=breakpoints, plot=plot)
+      FCI.ML <- fci.ml.boot(data.fuzzified=data.fuzzified, t=t, coef.boot= coef.boot, distribution=distribution, sig=sig, mu=mu, sigma=sigma, step = step, margin = margin, breakpoints=breakpoints, plot=plot)
       CI_L = FCI.ML[,1]
       CI_U = rev(FCI.ML[,2])
       

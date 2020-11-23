@@ -1,0 +1,147 @@
+---
+title: "On fuzzy analysis of variance"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{On fuzzy analysis of variance}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(FuzzySTs)
+```
+
+## `FMANOVA()`: Computes a fuzzy multi-ways analysis of variance (Mult-FANOVA) model
+
+`FuzzySTs::FMANOVA()` estimates a Mult-FANOVA model based on the construction of linear regression models. For this model, multiple factors can be introduced. This function can be computed by $3$ different methods (`distance`, `exact` and `approximation`) as given in the description of the function `FuzzySTs::Fuzzy.variance()`. The descriptions of the three procedures are given as follows:
+
+-   `distance`: By respect to a conveniently chosen distance, the calculations can be done as seen in Berkachy R. and Donzé L. R. ("*Fuzzy one-way ANOVA using the signed distance method to approximate the fuzzy product*, In: Rencontres Francophones sur la Logique Floue et ses Applications 2018. Ed. by Collectif LFA. Cépaduès Editions, pp. 253–264. ISBN: 978-2-36493-677-5) for the univariate one-way case using the signed distance. This method can be applied using the function `FuzzySTs::distance()`. The computed distances used in the calculations of the sums of squares are seen as a defuzzification of the obtained fuzzy numbers. The decision rule is done by comparing the obtained test statistics with respect to the distances to the quantiles of the bootstrapped distribution of the constructed test statistic.
+
+-   `exact`: For the method denoted by `exact`, the functions `FuzzySTs::Fuzzy.Difference()` and `FuzzySTs::Fuzzy.Square()` as numerical calculations of the difference and the square of two fuzzy numbers, are used. In this case, we practically preserve the fuzzy nature of the sums of square. Thus, no defuzzification of these sums are directly performed. Fuzzy numbers referring to the mean of the fuzzy treatment sums of squares $\tilde{B}$ and the weighted mean of the fuzzy residuals sums of squares denoted by $\tilde{E}^{\star}$, are constructed in order to make a decision. However, since overlapping between these fuzzy numbers is often expected, then a defuzzification as a last step is required.  The decision rule for this test is based on the surfaces of both fuzzy numbers $\tilde{B}$ and $\tilde{E}^{\star}$. The contribution of each fuzzy number to the total variation of fuzzy sums of squares is afterwards given.
+
+-   `approximation`: For the third case, i.e. `approximation`, the function is defined exactly in the same manner as the function by the `exact` method. The function `FuzzySTs::Fuzzy.Difference()` is used for the difference operation basically between trapezoidal or triangular fuzzy numbers. However, the calculation of the fuzzy square is based on an approximation for this case. The approximation used is the one given in Approximation 4 of the function `FuzzySTs::Fuzzy.variance()`. In other terms, for the fuzzy product, we use the operator proposed by the package `FuzzyNumbers`. The decision rule is the same as the one for the `exact` procedure.
+
+\noindent For the cases `exact` and `approximation`, we have to highlight that the outcome related to each factor could be printed at a time. No view of the overall set of factors can be exposed. Thus, the index of the factor in the model should be entered by the user. 
+
+From another side, we note that for the univariate case, a similar function is constructed. It is denoted by `FuzzySTs::FANOVA()`, and could be applied using exactly the same three methods previously described. For the case with the distance method, the procedure is described in Berkachy R. and Donzé L. R. ("*Fuzzy one-way ANOVA using the signed distance method to approximate the fuzzy product*, In: Rencontres Francophones sur la Logique Floue et ses Applications 2018. Ed. by Collectif LFA. Cépaduès Editions, pp. 253–264. ISBN: 978-2-36493-677-5). For the cases with the exact and approximation methods, the function `FuzzySTs::FANOVA()` returns fuzzy type decisions. Since the defuzzification is needed in these cases, a function called `FuzzySTs::Defuzz.FANOVA()` is proposed. The distance to be used in this case is set by default to the signed distance. Yet, several metrics can be used for this calculation. The output of the function `FuzzySTs::Defuzz.FANOVA()` is the same as the `FuzzySTs::FANOVA()` one but with the defuzzified results. We add that the bootstrap technique is used in such procedures to estimate the distributions of the corresponding statistics. A final remark is that for this function, the data set should be attached.
+
+This function returns a list of all the arguments of the function, the total, treatment and residuals sums of squares, the coefficients of the model, the test statistics with the corresponding p-values, and the decision made.
+
+In the case of the Mult-FANOVA model computed using a given distance, we also propose the function entitled `FuzzySTs::FMANOVA.summary()` which prints the summary of the estimation  of the corresponding Mult-FANOVA model, resulting from the function `FuzzySTs::FMANOVA()`. If the considered model includes interaction terms, then the function `FuzzySTs::FMANOVA.interaction.summary()` can be used to print the summary statistics related to these terms. We note that the obtained output is very similar to the one given by the known `stats::aov()` and `stats::lm()` functions of `R`. Thus, the elements of the result of a call of the function `FuzzySTs::FMANOVA()` is compatible with the class of `stats::lm()` functions, as instance with the functions `stats::terms()`, `stats::fitted.values()`, `stats::residuals()`, `stats::df.residuals()` etc.
+
+For the one-way case, an analog function denoted by `FuzzySTs::FANOVA.summary()` is introduced as well, in order to be compatible with the function `FuzzySTs::FANOVA()`. 
+
+```{r Chunk_E-01}
+mat <- matrix(c(2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,2,3,4,4,3,1,2,5,4,4,3),ncol=3)
+data <- data.frame(mat)
+MF131 <- TrapezoidalFuzzyNumber(0,1,1,2)
+MF132 <- TrapezoidalFuzzyNumber(1,2,2,3)
+MF133 <- TrapezoidalFuzzyNumber(2,3,3,4)
+MF134 <- TrapezoidalFuzzyNumber(3,4,4,5)
+MF135 <- TrapezoidalFuzzyNumber(4,5,5,6)
+PA13 <- c(1,2,3,4,5); mi <- 1; si <- 3
+Yfuzz <- FUZZ(data,1,3,PA13)
+
+attach(data)
+formula <- X3 ~ X1 + X2
+res <- FMANOVA(formula, data, Yfuzz, method = "distance", distance.type = "wabl")
+FMANOVA.summary(res)
+
+detach(data)
+```
+
+## `is.balanced()`: Verifies if a design is balanced
+
+`FuzzySTs::is.balanced()` is used to verify if a considered fitting model is balanced, i.e. if the number of observations by factor levels is the same. It returns a logical decision `TRUE` or `FALSE`, to indicate if a given design is respectively balanced or not.
+
+```{r Chunk_E-02}
+# Simple example
+data <- matrix(c(1,2,3,2,2,1,1,3,1,2),ncol=1)
+ni <- t(table(data))
+is.balanced(ni)
+```
+
+## `SEQ.ORDERING()`: Calculates the sequential sums of squares
+
+If the design of the model is not balanced, such that `is.balanced = FALSE`, the ordering of the variables affects the model. The function `FuzzySTs::SEQ.ORDERING()` re-calculates then the fitting model but by taking into account the sequential ordering of the factors. It calculates as well the coefficients of the model, the predicted values and the residuals according to the new model. We add that the coefficients of the model are calculated by compliance to the least squares method. Finally note that $3$ versions of this function, related to the $3$ methods (`distance`, `exact` and `approximation`), are proposed separately. These versions are respectively called `FuzzySTs::SEQ.ORDERING()`, `FuzzySTs::SEQ.ORDERING.EXACT()` and `FuzzySTs::SEQ.ORDERING.APPROXIMATION()`. These functions return a list of the new sets of sums of squares, as well as the coefficients, the residuals and the fitted.values.
+
+```{r Chunk_E-03}
+# Calculation of the sequential sums of squares
+mat <- matrix(c(2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,2,3,4,4,3,1,2,5,4,4,3),ncol=3)
+data <- data.frame(mat)
+MF131 <- TrapezoidalFuzzyNumber(0,1,1,2)
+MF132 <- TrapezoidalFuzzyNumber(1,2,2,3)
+MF133 <- TrapezoidalFuzzyNumber(2,3,3,4)
+MF134 <- TrapezoidalFuzzyNumber(3,4,4,5)
+MF135 <- TrapezoidalFuzzyNumber(4,5,5,6)
+PA13 <- c(1,2,3,4,5); mi <- 1; si <- 3
+Yfuzz <- FUZZ(data,1,3,PA13)
+
+attach(data)
+formula <- X3 ~ X1 + X2
+f.response <- matrix(rep(0), ncol = 1, nrow = nrow(Yfuzz))
+for (i in 1:nrow(Yfuzz)){
+  f.response[i] <- distance(TrapezoidalFuzzyNumber(Yfuzz[i,1],Yfuzz[i,2],
+                                                   Yfuzz[i,3],Yfuzz[i,4]),
+                            TriangularFuzzyNumber(0,0,0), "GSGD")}
+
+res <- SEQ.ORDERING (scope = formula, data = data, f.response = f.response)
+res$coefficients
+
+detach(data)
+```
+
+## `FTukeyHSD()`: Calculates the Tukey HSD test corresponding to the fuzzy response variable
+
+In the case of the Mult-FMANOVA model performed by the distance method, the function `FuzzySTs::FTukeyHSD()` calculates the Tukey HSD test applied on the mean of the fuzzy response variable related to the different factor levels. We have to remind that this test is done by variable, and not for the complete model. This function returns a table of comparisons of means of the different levels of a given factor, two by two. The table contains the means of populations, the lower and upper bounds of the confidence intervals, and their p-values.
+
+```{r Chunk_E-04}
+# Calculation of the Tukey HSD test for the fuzzy variable X1
+mat <- matrix(c(2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,2,3,4,4,3,1,2,5,4,4,3),ncol=3)
+data <- data.frame(mat)
+MF131 <- TrapezoidalFuzzyNumber(0,1,1,2)
+MF132 <- TrapezoidalFuzzyNumber(1,2,2,3)
+MF133 <- TrapezoidalFuzzyNumber(2,3,3,4)
+MF134 <- TrapezoidalFuzzyNumber(3,4,4,5)
+MF135 <- TrapezoidalFuzzyNumber(4,5,5,6)
+PA13 <- c(1,2,3,4,5); mi <- 1; si <- 3
+Yfuzz <- FUZZ(data,1,3,PA13)
+
+attach(data)
+formula <- X3 ~ X1 + X2
+res <- FMANOVA(formula, data, Yfuzz, method = "distance", distance.type = "wabl")
+FTukeyHSD(res, "X1")[[1]]
+
+detach(data)
+```
+
+## `Ftests()`: Calculates multiple tests corresponding to the fuzzy response variable
+
+In the case of the Mult-FMANOVA model performed by the distance method, this function `FuzzySTs::Ftests()` calculates multiple indicators of the comparison between the means of the different level factors. We draw the attention that these indicators are constructed on the sums of squares related to the complete model. Thus, no particular factors are specifically involved. This function returns a table of the following different indicators "Wilks","F-Wilks", "Hotelling-Lawley trace" and "Pillai Trace".
+
+```{r Chunk_E-05}
+# Calculation of the Ftests of the following example
+mat <- matrix(c(2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,2,3,4,4,3,1,2,5,4,4,3),ncol=3)
+data <- data.frame(mat)
+MF131 <- TrapezoidalFuzzyNumber(0,1,1,2)
+MF132 <- TrapezoidalFuzzyNumber(1,2,2,3)
+MF133 <- TrapezoidalFuzzyNumber(2,3,3,4)
+MF134 <- TrapezoidalFuzzyNumber(3,4,4,5)
+MF135 <- TrapezoidalFuzzyNumber(4,5,5,6)
+PA13 <- c(1,2,3,4,5); mi <- 1; si <- 3
+Yfuzz <- FUZZ(data,1,3,PA13)
+
+attach(data)
+formula <- X3 ~ X1 + X2
+res <- FMANOVA(formula, data, Yfuzz, method = "distance", distance.type = "wabl")
+Ftests(res)
+
+detach(data)
+```

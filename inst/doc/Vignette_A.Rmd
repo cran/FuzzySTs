@@ -1,12 +1,11 @@
 ---
-title: "On fuzzification tools and fuzzy arithmetics"
+title: "On fuzzification tools, fuzzy arithmetics and metrics"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{On fuzzification tools and fuzzy arithmetics}
+  %\VignetteIndexEntry{On fuzzification tools, fuzzy arithmetics and metrics}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -22,7 +21,8 @@ library(FuzzySTs)
 
 `FuzzySTs::is.alphacut()` verifies if a given matrix can be a matrix of numerical alpha-cuts. It is then verified if the considered matrix has the following requirements: it should be composed by 2 vectors in columns with no missing values, for which the lengthes of both vectors are equal. The first vector should be increasing and named "L" as left, and the second one should be decreasing and named "U" as upper. The last value of the first vector should be less than the first value of the second vector.
 
-```{r}
+```{r Chunk_A-01}
+# Simple example
 mat <- matrix(c(1,2,3,7,6,5), ncol = 2) 
 is.alphacuts(mat)
 ```
@@ -31,7 +31,8 @@ is.alphacuts(mat)
 
 For a given fuzzy number expressed by its numerical alpha-cuts such that `is.alphacuts = TRUE`, the function `FuzzySTs::nbreakpoints()` calculates the number of breakpoints chosen to numerically construct these alpha-cuts. In other terms, it is the number of sample points on which the membership functions are evaluated. 
 
-```{r}
+```{r Chunk_A-02}
+# Simple example
 X <- TrapezoidalFuzzyNumber(1,2,3,4)
 alpha.X <- alphacut(X, seq(0,1,0.01)) 
 nbreakpoints(alpha.X)
@@ -41,7 +42,8 @@ nbreakpoints(alpha.X)
 
 `FuzzySTs::GaussianFuzzyNumber()` creates a Gaussian fuzzy number from the class of Gaussian fuzzy numbers. This number is given by its numerical alpha-cuts such that `is.alphacuts = TRUE`. The smoothness of the constructed curve are defined by the step, the margin and the precision fixed by default to 0.01, [3 * sigma; 3 * sigma] and 4.
 
-```{r}
+```{r Chunk_A-03}
+# Simple example
 GFN <- GaussianFuzzyNumber(mean = 0, sigma = 1, alphacuts = TRUE, plot=TRUE)
 is.alphacuts(GFN)
 ```
@@ -50,7 +52,8 @@ is.alphacuts(GFN)
 
 `FuzzySTs::GaussianBellFuzzyNumber()` creates a two-sided Gaussian Bell fuzzy number from the class of Gaussian Bell fuzzy numbers. The constructed curve is a combination of two Gaussian curves. The smoothness of the constructed curve are defined by the step, the margin and the precision fixed by default to 0.01, [3 * left.sigma; 3 * right.sigma] and 4.
 
-```{r}
+```{r Chunk_A-04}
+# Simple example
 GBFN <- GaussianBellFuzzyNumber(left.mean = -1, left.sigma = 1, right.mean = 2, right.sigma = 1, alphacuts = TRUE, plot=TRUE)
 is.alphacuts(GBFN)
 ```
@@ -59,7 +62,8 @@ is.alphacuts(GBFN)
 
 `FuzzySTs::Fuzzy.Difference()` calculates the difference between two trapezoidal fuzzy numbers with respect to the extension principle. In case the fuzzy numbers are not trapezoidal, and written by their numerical alpha-cuts, the function constructs a trapezoidal approximation composed by the minimum and maximum values of the left and the right alpha-cuts of the fuzzy number. 
 
-```{r}
+```{r Chunk_A-05}
+# Simple example
 X <- TrapezoidalFuzzyNumber(5,6,7,8)
 Y <- TrapezoidalFuzzyNumber(1,2,3,4)
 Fuzzy.Difference(X,Y)
@@ -69,16 +73,18 @@ Fuzzy.Difference(X,Y)
 
 `FuzzySTs::Fuzzy.Square()` calculates numerically the square of a fuzzy number with respect to the extension principle. The considered input fuzzy number is supposed to be trapezoidal or triangular. However, if a fuzzy number of some other types is introduced by its numerical alpha-cuts, a trapezoidal approximative fuzzy number is constructed by considering the minimum and maximum values of the left and the right alpha-cuts of the fuzzy number. The calculations are based on resolving second order polynoms.
 
-```{r}
+```{r Chunk_A-06}
+# Simple example
 X <- TrapezoidalFuzzyNumber(1,2,3,4)
-Fuzzy.Square(X, plot=TRUE)
+head(Fuzzy.Square(X, plot=TRUE))
 ```
 
 ## `is.fuzzification()`: Verifies if a matrix is a fuzzification matrix
 
-`FuzzySTs::is.fuzzification()` checks if a array can be a fuzzification matrix of a given variable. If it is verified, the considered array should fulfill the following requirements: It should be an array composed by 3 dimensions (m, n, p), where the number of lines m is the number of observations in the data set, the number of columns n is the number of chosen breakpoints, and the third dimension should be fixed to the value $p=2$ (related to the left and right alpha-cuts of a fuzzy number). The numbers of lines and columns should be the same for dimensions $p=1$, i.e. left, and $p=2$ i.e. right.
+`FuzzySTs::is.fuzzification()` checks if an array can be a fuzzification matrix of a given variable. If it is verified, the considered array should fulfill the following requirements: It should be an array composed by 3 dimensions (m, n, p), where the number of lines m is the number of observations in the data set, the number of columns n is the number of chosen breakpoints, and the third dimension should be fixed to the value $p=2$ (related to the left and right alpha-cuts of a fuzzy number). The numbers of lines and columns should be the same for dimensions $p=1$, i.e. left, and $p=2$ i.e. right.
 
-```{r}
+```{r Chunk_A-07}
+# Simple example
 mat <- array(c(1,1,2,2,3,3,5,5,6,6,7,7),dim=c(2,3,2))
 is.fuzzification(mat)
 ```
@@ -87,7 +93,8 @@ is.fuzzification(mat)
 
 `FuzzySTs::is.trfuzzification()` checks if a considered matrix can be a matrix of fuzzification of a variable modelled by trapezoidal fuzzy numbers written by the quadruple (p,q,r,s). The matrix should be composed by 4 columns (p,q,r,s), such that p $\leq$ q $\leq$ r $\leq$ s, where the number of lines corresponds to the number of observations of the data set. Note that for triangular fuzzy numbers, the column q is equal to the column r.
 
-```{r}
+```{r Chunk_A-08}
+# Simple example
 mat <- matrix(c(1,1,2,2,3,3,4,4),ncol=4)
 is.trfuzzification(mat)
 ```
@@ -96,7 +103,8 @@ is.trfuzzification(mat)
 
 `FuzzySTs::tr.gfuzz()` transforms a trapezoidal fuzzification matrix such that `is.trfuzzification = TRUE`, to a 3-dimensional numerical fuzzification matrix for which `is.fuzzification = TRUE`.
 
-```{r}
+```{r Chunk_A-09}
+# Simple example
 data <- matrix(c(1,1,2,2,3,3,4,4),ncol=4)
 data.tr <- tr.gfuzz(data)
 ```
@@ -104,7 +112,7 @@ data.tr <- tr.gfuzz(data)
 ## `FUZZ()`: Fuzzifies a variable modelled by trapezoidal or triangular fuzzy numbers
 
 `FuzzySTs::FUZZ()` fuzzifies a variable modelled by trapezoidal or triangular fuzzy numbers. The output is such that `is.trfuzzification = TRUE`. The membership functions are required. They should be introduced in the following manner: they should be called "MF" attached to the index of the main-item followed by the one of the sub-item i.e. the variable, and finally the index of the linguistic term. 
-Note that the decomposition in supposed to be in main-items and sub-items. This syntax is the same as the one used in the fuzzification process of the package `FuzzyToolkitUoN`.
+Note that the decomposition is supposed to be in main-items and sub-items. This syntax is the same as the one used in the fuzzification process of the package `FuzzyToolkitUoN`.
 
 \noindent To illustrate the programming language related to the syntax of the membership functions of the modelling fuzzy numbers, we propose this following example:
   
@@ -134,7 +142,7 @@ Note that the decomposition in supposed to be in main-items and sub-items. This 
   | $\tilde{L}_{113}$ | MF113 | $\tilde{L}_{123}$ | MF123 | $\tilde{L}_{133}$ | MF133 | $\tilde{L}_{143}$ | MF143 | | 
   | $\tilde{L}_{114}$ | MF114 | |  | $\tilde{L}_{134}$ | MF134 | $\tilde{L}_{144}$ | MF144 |  | 
   
-  ```{r}
+```{r Chunk_A-10}
 # Fuzzification of the first sub-item of a data set - No decomposition is required 
 data <- matrix(c(1,2,3,2,2,1,1,3,1,2),ncol=1)
 MF111 <- TrapezoidalFuzzyNumber(0,1,1,2)
@@ -144,4 +152,40 @@ PA11 <- c(1,2,3)
 data.fuzzified <- FUZZ(data,mi=1,si=1,PA=PA11)
 is.trfuzzification(data.fuzzified)
 ```
+
+## `GFUZZ()`: Fuzzifies a variable modelled by any type of fuzzy numbers
+
+`FuzzySTs::GFUZZ()` fuzzifies a variable modelled by any type of fuzzy numbers. The output is such that `is.fuzzification = TRUE`. The list of possible types of fuzzy numbers is the one by the package `FuzzyNumbers` including the functions `FuzzySTs::GaussianFuzzyNumber()` and `FuzzySTs::GaussianBellFuzzyNumber()`.
+
+For the construction of the fuzzification matrix, the membership functions are required. One has the possibility to consider identical membership functions. In other terms, we mean that every linguistic will be modelled by different or identical fuzzy number across all the observations of the concerned variable. 
+
+The membership functions should be called "MF" attached to the index of the main-item followed by the one of the sub-item i.e. the variable, and finally the index of the linguistic term. This decomposition of the syntax related to the membership functions has been detailed in the description of the function `FuzzySTs::FUZZ()`.
+
+This function returns a numerical fuzzification array of 3 dimensions (m,n,2), with m lines, n columns and no missing values (NA).
+
+```{r Chunk_A-11}
+# Fuzzification of the first sub-item of a data set - No decomposition is required 
+data <- matrix(c(1,2,3,2,2,1,1,3,1,2),ncol=1)
+MF111 <- TrapezoidalFuzzyNumber(0,1,1,2)
+MF112 <- TrapezoidalFuzzyNumber(1,2,2,3)
+MF113 <- TrapezoidalFuzzyNumber(2,3,3,3)
+PA11 <- c(1,2,3)
+data.fuzzified <- GFUZZ(data,mi=1,si=1,PA=PA11)
+is.fuzzification(data.fuzzified)
+```
+
+## `distance()`: Calculates a distance between fuzzy numbers
+
+`FuzzySTs::GFUZZ()` calculates the distance between two fuzzy numbers with respect to a distance chosen from the following family of distances: the $\rho_1$ and $\rho_2$, the Bertoluzza distance $d_{Bertoluzza}$, the $\rho^{\star}_p$ and $\delta^{\star}_{p,q}$, the middle-spread distance $d_{mid/spr}$, the $\phi$-wabl/ldev/rdev distance $d_{\phi-wabl/ldev/rdev}$, the signed distance $d_{SGD}$, the ${\theta^{\star}}$-${SGD}$ revised signed metric $d_{SGD}^{\theta^{\star}}$ and the generalized signed distance $d_{GSGD}$. The last two distances are well described in the PhD Thesis of Berkachy ("*The signed distance measure in fuzzy statistical analysis*").  Note that the numerical integrations are made by the Simpson method. 
+
+```{r Chunk_A-12}
+# Calculation of the distance between two fuzzy numbers X and Y
+X <- TrapezoidalFuzzyNumber(1,2,3,4)
+Y <- TrapezoidalFuzzyNumber(4,5,6,7)
+distance(X, Y, type = "DSGD.G")
+distance(X, Y, type = "GSGD")
+```
+
+
+
 

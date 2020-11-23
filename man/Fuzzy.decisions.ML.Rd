@@ -9,6 +9,7 @@ Fuzzy.decisions.ML(
   H0,
   H1,
   t,
+  coef.boot,
   mu = NA,
   sigma = NA,
   sig,
@@ -35,6 +36,8 @@ or a similar matrix. No NA are allowed.}
 \item{H1}{a trapezoidal or a triangular fuzzy number representing the fuzzy alternative hypothesis.}
 
 \item{t}{a given numerical or fuzzy type parameter of the distribution.}
+
+\item{coef.boot}{a decimal representing the 1-sig-quantile of the bootstrap distribution of LR.}
 
 \item{mu}{if the mean of the normal distribution is known, mu should be a numerical value. Otherwise, the argument mu is fixed to NA.}
 
@@ -73,15 +76,16 @@ Returns a list composed by the arguments, the fuzzy confidence intervals, the fu
 Computes the fuzzy decisions of a fuzzy inference test by the fuzzy confidence intervals by the likelihood method
 }
 \examples{
-mat <- matrix(c(1,2,3,2,2,1),ncol=1)
+data <- matrix(c(1,2,3,2,2,1,1,3,1,2),ncol=1) 
 MF111 <- TrapezoidalFuzzyNumber(0,1,1,2)
 MF112 <- TrapezoidalFuzzyNumber(1,2,2,3)
 MF113 <- TrapezoidalFuzzyNumber(2,3,3,4)
 PA11 <- c(1,2,3)
-data.fuzzified <- FUZZ(mat,mi=1,si=1,PA=PA11) 
+data.fuzzified <- FUZZ(data,mi=1,si=1,PA=PA11)
 H0 <- alphacut(TriangularFuzzyNumber(2.9,3,3.1), seq(0,1, 0.01))
 H1 <- alphacut(TriangularFuzzyNumber(3,3,5), seq(0,1,0.01))
 t <- alphacut(TriangularFuzzyNumber(0.8,1.80,2.80), seq(0,1,0.01))
-res <- Fuzzy.decisions.ML(data.fuzzified, H0, H1, t = t, sigma = 0.79, sig = 0.05,
-distribution = "normal", distance.type = "GSGD")
+coef.boot <- 3.470085
+res <- Fuzzy.decisions.ML(data.fuzzified, H0, H1, t = t, coef.boot = coef.boot, 
+sigma = 0.79, sig = 0.05, distribution = "normal", distance.type = "GSGD")
 }

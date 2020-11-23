@@ -13,6 +13,7 @@ Fuzzy.CI.ML.test(
   sigma = NA,
   sig,
   distribution,
+  coef.boot,
   distance.type = "DSGD",
   i = 1,
   j = 1,
@@ -43,6 +44,8 @@ or a similar matrix. No NA are allowed.}
 \item{sig}{a numerical value representing the significance level of the test.}
 
 \item{distribution}{a distribution chosen between "normal", "poisson", "Student" or "Logistic".}
+
+\item{coef.boot}{a decimal representing the 1-sig-quantile of the bootstrap distribution of LR.}
 
 \item{distance.type}{type of distance chosen from the family of distances. The different choices are given by: "Rho1", "Rho2", "Bertoluzza", "Rhop", "Delta.pq", "Mid/Spr", "wabl", "DSGD", "DSGD.G", "GSGD".}
 
@@ -82,7 +85,8 @@ data.fuzzified <- FUZZ(data,mi=1,si=1,PA=PA11)
 Fmean <- Fuzzy.sample.mean(data.fuzzified)
 H0 <- TriangularFuzzyNumber(2.2,2.5,3)
 H1 <- TriangularFuzzyNumber(2.5,2.5,5)
+coef.boot <- 3.494829
 (res <- Fuzzy.CI.ML.test(data.fuzzified, H0, H1, t = Fmean, sigma=0.7888,
-sig=0.05, distribution="normal", distance.type="GSGD"))
+coef.boot = coef.boot, sig=0.05, distribution="normal", distance.type="GSGD"))
 res$decision
 }

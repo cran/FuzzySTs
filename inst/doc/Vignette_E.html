@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>On fuzzy analysis of variance</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">On fuzzy analysis of variance</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(FuzzySTs)</span></code></pre></div>
+<div id="fmanova-computes-a-fuzzy-multi-ways-analysis-of-variance-mult-fanova-model" class="section level2">
+<h2><code>FMANOVA()</code>: Computes a fuzzy multi-ways analysis of variance (Mult-FANOVA) model</h2>
+<p><code>FuzzySTs::FMANOVA()</code> estimates a Mult-FANOVA model based on the construction of linear regression models. For this model, multiple factors can be introduced. This function can be computed by <span class="math inline">\(3\)</span> different methods (<code>distance</code>, <code>exact</code> and <code>approximation</code>) as given in the description of the function <code>FuzzySTs::Fuzzy.variance()</code>. The descriptions of the three procedures are given as follows:</p>
+<ul>
+<li><p><code>distance</code>: By respect to a conveniently chosen distance, the calculations can be done as seen in Berkachy R. and Donzé L. R. (&quot;<em>Fuzzy one-way ANOVA using the signed distance method to approximate the fuzzy product</em>, In: Rencontres Francophones sur la Logique Floue et ses Applications 2018. Ed. by Collectif LFA. Cépaduès Editions, pp. 253–264. ISBN: 978-2-36493-677-5) for the univariate one-way case using the signed distance. This method can be applied using the function <code>FuzzySTs::distance()</code>. The computed distances used in the calculations of the sums of squares are seen as a defuzzification of the obtained fuzzy numbers. The decision rule is done by comparing the obtained test statistics with respect to the distances to the quantiles of the bootstrapped distribution of the constructed test statistic.</p></li>
+<li><p><code>exact</code>: For the method denoted by <code>exact</code>, the functions <code>FuzzySTs::Fuzzy.Difference()</code> and <code>FuzzySTs::Fuzzy.Square()</code> as numerical calculations of the difference and the square of two fuzzy numbers, are used. In this case, we practically preserve the fuzzy nature of the sums of square. Thus, no defuzzification of these sums are directly performed. Fuzzy numbers referring to the mean of the fuzzy treatment sums of squares <span class="math inline">\(\tilde{B}\)</span> and the weighted mean of the fuzzy residuals sums of squares denoted by <span class="math inline">\(\tilde{E}^{\star}\)</span>, are constructed in order to make a decision. However, since overlapping between these fuzzy numbers is often expected, then a defuzzification as a last step is required. The decision rule for this test is based on the surfaces of both fuzzy numbers <span class="math inline">\(\tilde{B}\)</span> and <span class="math inline">\(\tilde{E}^{\star}\)</span>. The contribution of each fuzzy number to the total variation of fuzzy sums of squares is afterwards given.</p></li>
+<li><p><code>approximation</code>: For the third case, i.e. <code>approximation</code>, the function is defined exactly in the same manner as the function by the <code>exact</code> method. The function <code>FuzzySTs::Fuzzy.Difference()</code> is used for the difference operation basically between trapezoidal or triangular fuzzy numbers. However, the calculation of the fuzzy square is based on an approximation for this case. The approximation used is the one given in Approximation 4 of the function <code>FuzzySTs::Fuzzy.variance()</code>. In other terms, for the fuzzy product, we use the operator proposed by the package <code>FuzzyNumbers</code>. The decision rule is the same as the one for the <code>exact</code> procedure.</p></li>
+</ul>
+<p>For the cases <code>exact</code> and <code>approximation</code>, we have to highlight that the outcome related to each factor could be printed at a time. No view of the overall set of factors can be exposed. Thus, the index of the factor in the model should be entered by the user.</p>
+<p>From another side, we note that for the univariate case, a similar function is constructed. It is denoted by <code>FuzzySTs::FANOVA()</code>, and could be applied using exactly the same three methods previously described. For the case with the distance method, the procedure is described in Berkachy R. and Donzé L. R. (&quot;<em>Fuzzy one-way ANOVA using the signed distance method to approximate the fuzzy product</em>, In: Rencontres Francophones sur la Logique Floue et ses Applications 2018. Ed. by Collectif LFA. Cépaduès Editions, pp. 253–264. ISBN: 978-2-36493-677-5). For the cases with the exact and approximation methods, the function <code>FuzzySTs::FANOVA()</code> returns fuzzy type decisions. Since the defuzzification is needed in these cases, a function called <code>FuzzySTs::Defuzz.FANOVA()</code> is proposed. The distance to be used in this case is set by default to the signed distance. Yet, several metrics can be used for this calculation. The output of the function <code>FuzzySTs::Defuzz.FANOVA()</code> is the same as the <code>FuzzySTs::FANOVA()</code> one but with the defuzzified results. We add that the bootstrap technique is used in such procedures to estimate the distributions of the corresponding statistics. A final remark is that for this function, the data set should be attached.</p>
+<p>This function returns a list of all the arguments of the function, the total, treatment and residuals sums of squares, the coefficients of the model, the test statistics with the corresponding p-values, and the decision made.</p>
+<p>In the case of the Mult-FANOVA model computed using a given distance, we also propose the function entitled <code>FuzzySTs::FMANOVA.summary()</code> which prints the summary of the estimation of the corresponding Mult-FANOVA model, resulting from the function <code>FuzzySTs::FMANOVA()</code>. If the considered model includes interaction terms, then the function <code>FuzzySTs::FMANOVA.interaction.summary()</code> can be used to print the summary statistics related to these terms. We note that the obtained output is very similar to the one given by the known <code>stats::aov()</code> and <code>stats::lm()</code> functions of <code>R</code>. Thus, the elements of the result of a call of the function <code>FuzzySTs::FMANOVA()</code> is compatible with the class of <code>stats::lm()</code> functions, as instance with the functions <code>stats::terms()</code>, <code>stats::fitted.values()</code>, <code>stats::residuals()</code>, <code>stats::df.residuals()</code> etc.</p>
+<p>For the one-way case, an analog function denoted by <code>FuzzySTs::FANOVA.summary()</code> is introduced as well, in order to be compatible with the function <code>FuzzySTs::FANOVA()</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>mat &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>),<span class="dt">ncol=</span><span class="dv">3</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(mat)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>MF131 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>MF132 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>)</span>
+<span id="cb2-5"><a href="#cb2-5"></a>MF133 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>)</span>
+<span id="cb2-6"><a href="#cb2-6"></a>MF134 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">5</span>)</span>
+<span id="cb2-7"><a href="#cb2-7"></a>MF135 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">6</span>)</span>
+<span id="cb2-8"><a href="#cb2-8"></a>PA13 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>); mi &lt;-<span class="st"> </span><span class="dv">1</span>; si &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a>Yfuzz &lt;-<span class="st"> </span><span class="kw">FUZZ</span>(data,<span class="dv">1</span>,<span class="dv">3</span>,PA13)</span>
+<span id="cb2-10"><a href="#cb2-10"></a></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="kw">attach</span>(data)</span>
+<span id="cb2-12"><a href="#cb2-12"></a>formula &lt;-<span class="st"> </span>X3 <span class="op">~</span><span class="st"> </span>X1 <span class="op">+</span><span class="st"> </span>X2</span>
+<span id="cb2-13"><a href="#cb2-13"></a>res &lt;-<span class="st"> </span><span class="kw">FMANOVA</span>(formula, data, Yfuzz, <span class="dt">method =</span> <span class="st">&quot;distance&quot;</span>, <span class="dt">distance.type =</span> <span class="st">&quot;wabl&quot;</span>)</span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="kw">FMANOVA.summary</span>(res)</span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="co">#&gt;    Df  Sum Sq Mean Sq F value  Pr(&gt;F)</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="co">#&gt; X1  1 0.10000 0.10000 0.07000 0.79896</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="co">#&gt; X2  1 1.99982 1.99982 1.39984 0.27537</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="co">#&gt; </span></span>
+<span id="cb2-20"><a href="#cb2-20"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="co">#&gt; [1] &quot;Residual mean sum of squares:1.4286 on 7 degrees of freedom.&quot;</span></span>
+<span id="cb2-22"><a href="#cb2-22"></a><span class="co">#&gt; </span></span>
+<span id="cb2-23"><a href="#cb2-23"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb2-24"><a href="#cb2-24"></a><span class="co">#&gt; [1] &quot; Multiple R-squared: 17.35527 F-statistic: 0.73492 on 2 and 7 with p-value: 0.51319.&quot;</span></span>
+<span id="cb2-25"><a href="#cb2-25"></a></span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="kw">detach</span>(data)</span></code></pre></div>
+</div>
+<div id="is.balanced-verifies-if-a-design-is-balanced" class="section level2">
+<h2><code>is.balanced()</code>: Verifies if a design is balanced</h2>
+<p><code>FuzzySTs::is.balanced()</code> is used to verify if a considered fitting model is balanced, i.e. if the number of observations by factor levels is the same. It returns a logical decision <code>TRUE</code> or <code>FALSE</code>, to indicate if a given design is respectively balanced or not.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Simple example</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>data &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">2</span>),<span class="dt">ncol=</span><span class="dv">1</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>ni &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">table</span>(data))</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="kw">is.balanced</span>(ni)</span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+</div>
+<div id="seq.ordering-calculates-the-sequential-sums-of-squares" class="section level2">
+<h2><code>SEQ.ORDERING()</code>: Calculates the sequential sums of squares</h2>
+<p>If the design of the model is not balanced, such that <code>is.balanced = FALSE</code>, the ordering of the variables affects the model. The function <code>FuzzySTs::SEQ.ORDERING()</code> re-calculates then the fitting model but by taking into account the sequential ordering of the factors. It calculates as well the coefficients of the model, the predicted values and the residuals according to the new model. We add that the coefficients of the model are calculated by compliance to the least squares method. Finally note that <span class="math inline">\(3\)</span> versions of this function, related to the <span class="math inline">\(3\)</span> methods (<code>distance</code>, <code>exact</code> and <code>approximation</code>), are proposed separately. These versions are respectively called <code>FuzzySTs::SEQ.ORDERING()</code>, <code>FuzzySTs::SEQ.ORDERING.EXACT()</code> and <code>FuzzySTs::SEQ.ORDERING.APPROXIMATION()</code>. These functions return a list of the new sets of sums of squares, as well as the coefficients, the residuals and the fitted.values.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Calculation of the sequential sums of squares</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>mat &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>),<span class="dt">ncol=</span><span class="dv">3</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a>data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(mat)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>MF131 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb4-5"><a href="#cb4-5"></a>MF132 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>)</span>
+<span id="cb4-6"><a href="#cb4-6"></a>MF133 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>)</span>
+<span id="cb4-7"><a href="#cb4-7"></a>MF134 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">5</span>)</span>
+<span id="cb4-8"><a href="#cb4-8"></a>MF135 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">6</span>)</span>
+<span id="cb4-9"><a href="#cb4-9"></a>PA13 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>); mi &lt;-<span class="st"> </span><span class="dv">1</span>; si &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>Yfuzz &lt;-<span class="st"> </span><span class="kw">FUZZ</span>(data,<span class="dv">1</span>,<span class="dv">3</span>,PA13)</span>
+<span id="cb4-11"><a href="#cb4-11"></a></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="kw">attach</span>(data)</span>
+<span id="cb4-13"><a href="#cb4-13"></a>formula &lt;-<span class="st"> </span>X3 <span class="op">~</span><span class="st"> </span>X1 <span class="op">+</span><span class="st"> </span>X2</span>
+<span id="cb4-14"><a href="#cb4-14"></a>f.response &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rep</span>(<span class="dv">0</span>), <span class="dt">ncol =</span> <span class="dv">1</span>, <span class="dt">nrow =</span> <span class="kw">nrow</span>(Yfuzz))</span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(Yfuzz)){</span>
+<span id="cb4-16"><a href="#cb4-16"></a>  f.response[i] &lt;-<span class="st"> </span><span class="kw">distance</span>(<span class="kw">TrapezoidalFuzzyNumber</span>(Yfuzz[i,<span class="dv">1</span>],Yfuzz[i,<span class="dv">2</span>],</span>
+<span id="cb4-17"><a href="#cb4-17"></a>                                                   Yfuzz[i,<span class="dv">3</span>],Yfuzz[i,<span class="dv">4</span>]),</span>
+<span id="cb4-18"><a href="#cb4-18"></a>                            <span class="kw">TriangularFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="st">&quot;GSGD&quot;</span>)}</span>
+<span id="cb4-19"><a href="#cb4-19"></a></span>
+<span id="cb4-20"><a href="#cb4-20"></a>res &lt;-<span class="st"> </span><span class="kw">SEQ.ORDERING</span> (<span class="dt">scope =</span> formula, <span class="dt">data =</span> data, <span class="dt">f.response =</span> f.response)</span>
+<span id="cb4-21"><a href="#cb4-21"></a>res<span class="op">$</span>coefficients</span>
+<span id="cb4-22"><a href="#cb4-22"></a><span class="co">#&gt;                   [,1]</span></span>
+<span id="cb4-23"><a href="#cb4-23"></a><span class="co">#&gt; (Intercept)  6.2229403</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a><span class="co">#&gt; X1          -0.7282737</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a><span class="co">#&gt; X2          -0.9792057</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a></span>
+<span id="cb4-27"><a href="#cb4-27"></a><span class="kw">detach</span>(data)</span></code></pre></div>
+</div>
+<div id="ftukeyhsd-calculates-the-tukey-hsd-test-corresponding-to-the-fuzzy-response-variable" class="section level2">
+<h2><code>FTukeyHSD()</code>: Calculates the Tukey HSD test corresponding to the fuzzy response variable</h2>
+<p>In the case of the Mult-FMANOVA model performed by the distance method, the function <code>FuzzySTs::FTukeyHSD()</code> calculates the Tukey HSD test applied on the mean of the fuzzy response variable related to the different factor levels. We have to remind that this test is done by variable, and not for the complete model. This function returns a table of comparisons of means of the different levels of a given factor, two by two. The table contains the means of populations, the lower and upper bounds of the confidence intervals, and their p-values.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Calculation of the Tukey HSD test for the fuzzy variable X1</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>mat &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>),<span class="dt">ncol=</span><span class="dv">3</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(mat)</span>
+<span id="cb5-4"><a href="#cb5-4"></a>MF131 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>MF132 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>)</span>
+<span id="cb5-6"><a href="#cb5-6"></a>MF133 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>)</span>
+<span id="cb5-7"><a href="#cb5-7"></a>MF134 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">5</span>)</span>
+<span id="cb5-8"><a href="#cb5-8"></a>MF135 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">6</span>)</span>
+<span id="cb5-9"><a href="#cb5-9"></a>PA13 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>); mi &lt;-<span class="st"> </span><span class="dv">1</span>; si &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a>Yfuzz &lt;-<span class="st"> </span><span class="kw">FUZZ</span>(data,<span class="dv">1</span>,<span class="dv">3</span>,PA13)</span>
+<span id="cb5-11"><a href="#cb5-11"></a></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="kw">attach</span>(data)</span>
+<span id="cb5-13"><a href="#cb5-13"></a>formula &lt;-<span class="st"> </span>X3 <span class="op">~</span><span class="st"> </span>X1 <span class="op">+</span><span class="st"> </span>X2</span>
+<span id="cb5-14"><a href="#cb5-14"></a>res &lt;-<span class="st"> </span><span class="kw">FMANOVA</span>(formula, data, Yfuzz, <span class="dt">method =</span> <span class="st">&quot;distance&quot;</span>, <span class="dt">distance.type =</span> <span class="st">&quot;wabl&quot;</span>)</span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="kw">FTukeyHSD</span>(res, <span class="st">&quot;X1&quot;</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="co">#&gt;   Grp1 Grp2       diff       lwr      upr p value     p adj</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="co">#&gt; 1    2    1 -0.2487879 -2.483168 1.985593       1 0.7999089</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="kw">detach</span>(data)</span></code></pre></div>
+</div>
+<div id="ftests-calculates-multiple-tests-corresponding-to-the-fuzzy-response-variable" class="section level2">
+<h2><code>Ftests()</code>: Calculates multiple tests corresponding to the fuzzy response variable</h2>
+<p>In the case of the Mult-FMANOVA model performed by the distance method, this function <code>FuzzySTs::Ftests()</code> calculates multiple indicators of the comparison between the means of the different level factors. We draw the attention that these indicators are constructed on the sums of squares related to the complete model. Thus, no particular factors are specifically involved. This function returns a table of the following different indicators “Wilks”,“F-Wilks”, “Hotelling-Lawley trace” and “Pillai Trace”.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Calculation of the Ftests of the following example</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>mat &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>),<span class="dt">ncol=</span><span class="dv">3</span>)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(mat)</span>
+<span id="cb6-4"><a href="#cb6-4"></a>MF131 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb6-5"><a href="#cb6-5"></a>MF132 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>)</span>
+<span id="cb6-6"><a href="#cb6-6"></a>MF133 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>)</span>
+<span id="cb6-7"><a href="#cb6-7"></a>MF134 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">5</span>)</span>
+<span id="cb6-8"><a href="#cb6-8"></a>MF135 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">6</span>)</span>
+<span id="cb6-9"><a href="#cb6-9"></a>PA13 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>); mi &lt;-<span class="st"> </span><span class="dv">1</span>; si &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a>Yfuzz &lt;-<span class="st"> </span><span class="kw">FUZZ</span>(data,<span class="dv">1</span>,<span class="dv">3</span>,PA13)</span>
+<span id="cb6-11"><a href="#cb6-11"></a></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="kw">attach</span>(data)</span>
+<span id="cb6-13"><a href="#cb6-13"></a>formula &lt;-<span class="st"> </span>X3 <span class="op">~</span><span class="st"> </span>X1 <span class="op">+</span><span class="st"> </span>X2</span>
+<span id="cb6-14"><a href="#cb6-14"></a>res &lt;-<span class="st"> </span><span class="kw">FMANOVA</span>(formula, data, Yfuzz, <span class="dt">method =</span> <span class="st">&quot;distance&quot;</span>, <span class="dt">distance.type =</span> <span class="st">&quot;wabl&quot;</span>)</span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="kw">Ftests</span>(res)</span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="co">#&gt; $Ftests</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="co">#&gt;                             [,1]</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="co">#&gt; Wilks                  0.8196313</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="co">#&gt; F-Wilks                0.7702127</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a><span class="co">#&gt; Hotelling-Lawley trace 0.2083111</span></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="co">#&gt; Pillai Trace           0.1749157</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a></span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="kw">detach</span>(data)</span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

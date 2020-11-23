@@ -1,0 +1,268 @@
+---
+title: "On evaluations of linguistic questionnaires"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{On evaluations of linguistic questionnaires}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(FuzzySTs)
+```
+
+## `adjusted.weight.SI()`: Calculates the adjusted weight for a given sub-item of a linguistic questionnaire
+
+For a given observation, `FuzzySTs::adjusted.weight.SI()` calculates the adjusted weight of a sub-item of a linguistic questionnaire when non-response is present. This function re-distributes the weights on the non-missing answers. Counting the answers in a given sub-item can be done based on the functions `FuzzySTs::delta_jki()` and `FuzzySTs::Delta_jki()`. This function returns a numerical value giving the re-adjusted weight of the sub-item *k* of the considered main-item for the observation *i*.
+
+```{r Chunk_D-01}
+# Simple example
+data <- matrix(c(3,4,2,3,3,2,4,3,3,4,3,4,4,2,5,3,4,4,3,3,3,4,4,3,
+3,3,4,3,3,3,3,4,4,3,5,3,4,3,3,3), ncol = 4)
+adjusted.weight.SI(data, 7, 1, c(0.5,0.5))
+```
+
+## `adjusted.weight.MI()`: Calculates the adjusted weight for a given main-item of a linguistic questionnaire
+
+When non-response is present, `FuzzySTs::adjusted.weight.MI()` calculates the adjusted weight given to a main-item of a linguistic questionnaire related to a particular observation. This function re-distributes the weights based on the missing answers occuring in a given main-item. The calculation of the readjusted weight in a sub-item is done using the function `FuzzySTs::adjusted.weight.SI()`. For the inputs of this function, a decomposition by main-items and sub-items similar to the one described using the function `FuzzySTs::FUZZ()` or the function `FuzzySTs::IND.EVAL()` is needed. We remind that the membership functions should be called "MF" attached to the index of the main-item followed by the one of the sub-item i.e. the variable, and finally the index of the linguistic term. This function returns a numerical value giving the re-adjusted weight of the main-item *j* for the observation *i*.
+
+```{r Chunk_D-02}
+# Calculation of a re-adjusted weight of the main-item 1 for the observation 9
+data <- matrix(c(3,4,2,3,3,2,4,3,3,4,3,4,4,2,5,3,4,4,3,3,3,4,4,3,
+3,3,4,3,3,3,3,4,4,3,5,3,4,3,3,3), ncol = 4)
+data <- as.data.frame(data)
+MI <- 2 # main-items
+SI1 <- 2
+SI2 <- 2
+SI <- c(SI1,SI2) # decomposition by sub-items
+b_j <- c(1/2,1/2) # weights of main-items
+b_jk <- matrix(c(0.5,0.5,0.5,0.5),nrow=2) # weights of sub-items by main-items
+PA11 <- c(1,2,3,4,5) # possible answers for the sub-item 1 of the main-item 1
+PA12 <- c(1,2,3,4,5) # possible answers for the sub-item 2 of the main-item 1
+PA21 <- c(1,2,3,4,5) # possible answers for the sub-item 1 of the main-item 2
+PA22 <- c(1,2,3,4,5) # possible answers for the sub-item 2 of the main-item 2
+
+# Fuzzification step
+# ------------------
+MF111 <- TrapezoidalFuzzyNumber(0,2,2,7)
+MF112 <- TrapezoidalFuzzyNumber(2,7,7,15)
+MF113 <- TrapezoidalFuzzyNumber(7,15,15,23)
+MF114 <- TrapezoidalFuzzyNumber(15,23,23,28)
+MF115 <- TrapezoidalFuzzyNumber(23,28,28,30)
+MF11 <- GFUZZ(data, 1, 1, PA11, spec="Identical", breakpoints = 100)
+# ------------------
+MF121 <- TrapezoidalFuzzyNumber(0,2,2,7)
+MF122 <- TrapezoidalFuzzyNumber(2,7,7,15)
+MF123 <- TrapezoidalFuzzyNumber(7,15,15,23)
+MF124 <- TrapezoidalFuzzyNumber(15,23,23,28)
+MF125 <- TrapezoidalFuzzyNumber(23,28,28,30)
+MF12 <- GFUZZ(data, 1, 2, PA12, spec="Identical", breakpoints = 100)
+# ------------------
+MF211 <- TrapezoidalFuzzyNumber(0,2,2,7)
+MF212 <- TrapezoidalFuzzyNumber(2,7,7,15)
+MF213 <- TrapezoidalFuzzyNumber(7,15,15,23)
+MF214 <- TrapezoidalFuzzyNumber(15,23,23,28)
+MF215 <- TrapezoidalFuzzyNumber(23,28,28,30)
+MF21 <- GFUZZ(data, 2, 1, PA21, spec="Identical", breakpoints = 100)
+# ------------------
+MF221 <- TrapezoidalFuzzyNumber(0,2,2,7)
+MF222 <- TrapezoidalFuzzyNumber(2,7,7,15)
+MF223 <- TrapezoidalFuzzyNumber(7,15,15,23)
+MF224 <- TrapezoidalFuzzyNumber(15,23,23,28)
+MF225 <- TrapezoidalFuzzyNumber(23,28,28,30)
+MF22 <- GFUZZ(data, 2, 2, PA22, spec="Identical", breakpoints = 100)
+# ------------------
+
+range <- matrix(c(0,0,0,0,28,28,28,28), ncol=2)
+adjusted.weight.MI(data, 9, 1, b_j, b_jk, SI)
+```
+
+## `IND.EVAL()`: Calculates the individual evaluations of a linguistic questionnaire
+
+`FuzzySTs::IND.EVAL()` calculates the individual evaluations of a linguistic questionnaire. The user has to define the data set to be evaluated, and the decomposition of the linguistic questionnaire by main and sub-items. The related initial weights have to be defined as well. In addition, a distance has to be chosen from the family of distances used by the function `FuzzySTs::distance()`. Finally, the fuzzy numbers modelling the different linguistic terms should be given. The computations can be made using all types of fuzzy numbers. We add that the argument `spec = "Identical"` refers to the fact that every linguistic $L_{q}$ will be modelled by the identical fuzzy number across all the observations of the concerned variable. For the syntax to be used, each fuzzy linguistic should be called "MF" attached to the index of its main-item, followed by the index of its sub-item, and the one of the linguistic term, as explained in the description of the function `FuzzySTs::FUZZ()`. Let us recall the detailed decomposition of the modelling schema of the example of `FuzzySTs::FUZZ()`:
+  
+  \noindent Consider a data set composed by 5 linguistic variables. We expose the needed decomposition in main and sub-items. We propose to divide the data set into $2$ main-items as given in the following table. For each linguistic term of the considered variable, one has to choose a corresponding modelling fuzzy number. Suppose we want to model the linguistic $L_{213}$, i.e. the third linguistic term of the first variable found in the second main-item, by a fuzzy number written as $\tilde{L}_{213}$. Its membership function should then be expressed by MF213 as follows: 
+  
+  | Decomposition 1    | | | | | |         |            |        |      |
+  |------|------|------|------|------|------|------|------|------|------|
+  | Main-item ({mi=1}) |      |      |      |      | Main-item ({mi=2}) |    |      |      |      | 
+  | Sub-item 1 | | Sub-item 2 | | Sub-item 3 | | Sub-item 1 | | Sub-item 2 |        |
+  | si=1 | | si=2 | |  si=3 | | si=1 | | si=2 | | 
+  | $\tilde{L}_{111}$ | MF111 | $\tilde{L}_{121}$ | MF121 | $\tilde{L}_{131}$ | MF131 | $\tilde{L}_{211}$ | MF211 | $\tilde{L}_{221}$ | MF221 | 
+  | $\tilde{L}_{112}$ | MF112 | $\tilde{L}_{122}$ | MF122 | $\tilde{L}_{132}$ | MF132 | $\tilde{L}_{212}$ | MF212 | $\tilde{L}_{222}$ | MF222 | 
+  | $\tilde{L}_{113}$ | MF113 | $\tilde{L}_{123}$ | MF123 | $\tilde{L}_{133}$ | MF133 | $\tilde{L}_{213}$ | MF213 | | 
+  | $\tilde{L}_{114}$ | MF114 | |  | $\tilde{L}_{134}$ | MF134 | $\tilde{L}_{214}$ | MF214 |  | 
+  
+  
+  
+  \noindent If the decomposition in main and sub-items is not required, it is then recommended to fix the index of the main-item to $1$. Consequently, the index of the sub-item will be nothing but the column position of the variable in the architecture of the data set. For the same example previously described where the fourth variable has to be modelled by fuzzy numbers, suppose that no decomposition is desired, then the architecture becomes as seen in the following table. Therefore, the considered linguistic term $L_{213}$ of the previous example is now on called $L_{143}$ with its corresponding fuzzy number $\tilde{L}_{143}$. Its membership function will afterwards be denoted by MF143 as given by:
+  
+  | Decomposition 2    | | | | | |         |            |        |      |
+  |------|------|------|------|------|------|------|------|------|------|
+  | Main-item ({mi=1}) |      |      |      |      |  |    |      |      |      | 
+  | Sub-item 1 | | Sub-item 2 | | Sub-item 3 | | Sub-item 4 | | Sub-item 5 |        |
+  | si=1 | | si=2 | |  si=3 | | si=4 | | si=5 | | 
+  | $\tilde{L}_{111}$ | MF111 | $\tilde{L}_{121}$ | MF121 | $\tilde{L}_{131}$ | MF131 | $\tilde{L}_{141}$ | MF141 | $\tilde{L}_{151}$ | MF151 | 
+  | $\tilde{L}_{112}$ | MF112 | $\tilde{L}_{122}$ | MF122 | $\tilde{L}_{132}$ | MF132 | $\tilde{L}_{142}$ | MF142 | $\tilde{L}_{152}$ | MF152 | 
+  | $\tilde{L}_{113}$ | MF113 | $\tilde{L}_{123}$ | MF123 | $\tilde{L}_{133}$ | MF133 | $\tilde{L}_{143}$ | MF143 | | 
+  | $\tilde{L}_{114}$ | MF114 | |  | $\tilde{L}_{134}$ | MF134 | $\tilde{L}_{144}$ | MF144 |  | 
+  
+  We have to mention that adding up the answers of a given linguistic are implemented as the functions `FuzzySTs::delta_jki` and `FuzzySTs::Delta_jki` respectively. In addition, if missingness occurs in the data set, we propose to readjust the weights of the main and sub-items. Practically, this task will be performed using the function `FuzzySTs::adjusted.weight.MI()` and `FuzzySTs::adjusted.weight.SI()`.
+  
+  Finally, this function returns the data set of individual evaluations, for which the number of observations is exactly the same as the initial data set.
+  
+```{r Chunk_D-03}
+# Calculation the individual evaluations of the following data set 
+data <- matrix(c(3,4,2,3,3,2,4,3,3,4,3,4,4,2,5,3,4,4,3,3,3,4,4,3,
+3,3,4,3,3,3,3,4,4,3,5,3,4,3,3,3), ncol = 4)
+data <- as.data.frame(data)
+MI <- 2 # main-items
+SI1 <- 2
+SI2 <- 2
+SI <- c(SI1,SI2) # decomposition by sub-items
+b_j <- c(1/2,1/2) # weights of main-items
+b_jk <- matrix(c(0.5,0.5,0.5,0.5),nrow=2) # weights of sub-items by main-items
+PA11 <- c(1,2,3,4,5) # possible answers for the sub-item 1 of the main-item 1
+PA12 <- c(1,2,3,4,5) # possible answers for the sub-item 2 of the main-item 1
+PA21 <- c(1,2,3,4,5) # possible answers for the sub-item 1 of the main-item 2
+PA22 <- c(1,2,3,4,5) # possible answers for the sub-item 2 of the main-item 2
+
+# Fuzzification step
+# ------------------
+MF111 <- TrapezoidalFuzzyNumber(0,2,2,7)
+MF112 <- TrapezoidalFuzzyNumber(2,7,7,15)
+MF113 <- TrapezoidalFuzzyNumber(7,15,15,23)
+MF114 <- TrapezoidalFuzzyNumber(15,23,23,28)
+MF115 <- TrapezoidalFuzzyNumber(23,28,28,30)
+MF11 <- GFUZZ(data, 1, 1, PA11, spec="Identical", breakpoints = 100)
+# ------------------
+MF121 <- TrapezoidalFuzzyNumber(0,2,2,7)
+MF122 <- TrapezoidalFuzzyNumber(2,7,7,15)
+MF123 <- TrapezoidalFuzzyNumber(7,15,15,23)
+MF124 <- TrapezoidalFuzzyNumber(15,23,23,28)
+MF125 <- TrapezoidalFuzzyNumber(23,28,28,30)
+MF12 <- GFUZZ(data, 1, 2, PA12, spec="Identical", breakpoints = 100)
+# ------------------
+MF211 <- TrapezoidalFuzzyNumber(0,2,2,7)
+MF212 <- TrapezoidalFuzzyNumber(2,7,7,15)
+MF213 <- TrapezoidalFuzzyNumber(7,15,15,23)
+MF214 <- TrapezoidalFuzzyNumber(15,23,23,28)
+MF215 <- TrapezoidalFuzzyNumber(23,28,28,30)
+MF21 <- GFUZZ(data, 2, 1, PA21, spec="Identical", breakpoints = 100)
+# ------------------
+MF221 <- TrapezoidalFuzzyNumber(0,2,2,7)
+MF222 <- TrapezoidalFuzzyNumber(2,7,7,15)
+MF223 <- TrapezoidalFuzzyNumber(7,15,15,23)
+MF224 <- TrapezoidalFuzzyNumber(15,23,23,28)
+MF225 <- TrapezoidalFuzzyNumber(23,28,28,30)
+MF22 <- GFUZZ(data, 2, 2, PA22, spec="Identical", breakpoints = 100)
+# ------------------
+
+range <- matrix(c(0,0,0,0,28,28,28,28), ncol=2)
+ind.eval <- IND.EVAL(data,MI,b_j,SI,b_jk, range = range, distance.type ="DSGD.G")
+head(ind.eval)
+```
+
+## `GLOB.EVAL()`: Calculates the global evaluation of a linguistic questionnaire
+
+`FuzzySTs::GLOB.EVAL()` calculates the global evaluation of a linguistic questionnaire. The arguments of this function, i.e. the decomposition by main and sub-items, are similar to the ones of the function `FuzzySTs::IND.EVAL()`.
+
+We have to remind that under the assumption of non-missingness, the global evaluation is the weighted mean of the set of individual evaluations resulting from the function `FuzzySTs::IND.EVAL()`. Thus, one can get the global evaluation using the basic function `stats::Weighted.mean()`. Nevertheless, we introduce a function `FuzzySTs::GLOB.EVAL.mean (ind.eval, p_ind)` applied on the vector of individual evaluations called `ind.eval` with the vector of weights denoted by `p_ind`. We add that if no sampling weights are applied, the argument `p_ind` is set to be `p_ind=rep(1, length(ind.eval))`. Note that `FuzzySTs::GLOB.EVAL()` returns a numerical value representing the global evaluation of the linguistic questionnaire.
+
+```{r Chunk_D-04}
+# Calculation of the global evaluation of the following data set
+data <- matrix(c(3,4,2,3,3,2,4,3,3,4,3,4,4,2,5,3,4,4,3,3,3,4,4,3,
+3,3,4,3,3,3,3,4,4,3,5,3,4,3,3,3), ncol = 4)
+data <- as.data.frame(data)
+MI <- 2 # main-items
+SI1 <- 2
+SI2 <- 2
+SI <- c(SI1,SI2) # decomposition by sub-items
+b_j <- c(1/2,1/2) # weights of main-items
+b_jk <- matrix(c(0.5,0.5,0.5,0.5),nrow=2) # weights of sub-items by main-items
+PA11 <- c(1,2,3,4,5) # possible answers for the sub-item 1 of the main-item 1
+PA12 <- c(1,2,3,4,5) # possible answers for the sub-item 2 of the main-item 1
+PA21 <- c(1,2,3,4,5) # possible answers for the sub-item 1 of the main-item 2
+PA22 <- c(1,2,3,4,5) # possible answers for the sub-item 2 of the main-item 2
+
+# Fuzzification step
+# ------------------
+MF111 <- TrapezoidalFuzzyNumber(0,2,2,7)
+MF112 <- TrapezoidalFuzzyNumber(2,7,7,15)
+MF113 <- TrapezoidalFuzzyNumber(7,15,15,23)
+MF114 <- TrapezoidalFuzzyNumber(15,23,23,28)
+MF115 <- TrapezoidalFuzzyNumber(23,28,28,30)
+MF11 <- GFUZZ(data, 1, 1, PA11, spec="Identical", breakpoints = 100)
+# ------------------
+MF121 <- TrapezoidalFuzzyNumber(0,2,2,7)
+MF122 <- TrapezoidalFuzzyNumber(2,7,7,15)
+MF123 <- TrapezoidalFuzzyNumber(7,15,15,23)
+MF124 <- TrapezoidalFuzzyNumber(15,23,23,28)
+MF125 <- TrapezoidalFuzzyNumber(23,28,28,30)
+MF12 <- GFUZZ(data, 1, 2, PA12, spec="Identical", breakpoints = 100)
+# ------------------
+MF211 <- TrapezoidalFuzzyNumber(0,2,2,7)
+MF212 <- TrapezoidalFuzzyNumber(2,7,7,15)
+MF213 <- TrapezoidalFuzzyNumber(7,15,15,23)
+MF214 <- TrapezoidalFuzzyNumber(15,23,23,28)
+MF215 <- TrapezoidalFuzzyNumber(23,28,28,30)
+MF21 <- GFUZZ(data, 2, 1, PA21, spec="Identical", breakpoints = 100)
+# ------------------
+MF221 <- TrapezoidalFuzzyNumber(0,2,2,7)
+MF222 <- TrapezoidalFuzzyNumber(2,7,7,15)
+MF223 <- TrapezoidalFuzzyNumber(7,15,15,23)
+MF224 <- TrapezoidalFuzzyNumber(15,23,23,28)
+MF225 <- TrapezoidalFuzzyNumber(23,28,28,30)
+MF22 <- GFUZZ(data, 2, 2, PA22, spec="Identical", breakpoints = 100)
+# ------------------
+
+range <- matrix(c(0,0,0,0,28,28,28,28), ncol=2)
+ind.eval <- IND.EVAL(data,MI,b_j,SI,b_jk, range = range, distance.type ="DSGD.G")
+
+(GLOB <- GLOB.EVAL(data, MI, b_j, SI, b_jk, distance.type ="GSGD"))
+(GLOB.mean <- GLOB.EVAL.mean(ind.eval))
+```
+
+## `R()`: Calculates the indicator of information's rate of the data base
+
+`FuzzySTs::R()` calculates the indicator of information's rate of the complete data base. This computation uses the functions `FuzzySTs::adjusted.weight.SI()` and `FuzzySTs::Delta_jki()`. The function `FuzzySTs::R()` returns a numerical value, interpreted as the more it tends to the value $1$, the less the complete questionnaire contains missing values.
+
+```{r Chunk_D-05}
+# Calculation of the indicator of information's rate - complete data set
+data <- matrix(c(3,4,2,3,3,2,4,3,3,4,3,4,4,2,5,3,4,4,3,3,3,4,4,3,
+3,3,4,3,3,3,3,4,4,3,5,3,4,3,3,3), ncol = 4)
+data <- as.data.frame(data)
+p_ind <- c(0.1,0.05,0.05,0.2,0.1,0.05,0.1,0.1,0.2,0.05) # Observations' weights
+SI1 <- 2
+SI2 <- 2
+SI <- c(SI1,SI2)
+b_jk <- matrix(c(0.5,0.5,0.5,0.5),nrow=2) 
+
+R(data, p_ind, b_jk, SI)
+```
+
+## `Ri()`: Calculates the indicator of information's rate of the data base for a given unit
+
+`FuzzySTs::Ri()` calculates the indicator of information's rate of the complete data base for a given unit. This computation uses the functions `FuzzySTs::adjusted.weight.SI()` and `FuzzySTs::Delta_jki()`. The function `FuzzySTs::Ri()` returns a numerical value related to a particular observation. This value is interpreted as the more it tends to the value $1$, the less the complete questionnaire contains missing values.
+
+```{r Chunk_D-06}
+# Calculation of the indicator of information's rate for the unit 7
+data <- matrix(c(3,4,2,3,3,2,4,3,3,4,3,4,4,2,5,3,4,4,3,3,3,4,4,3,
+3,3,4,3,3,3,3,4,4,3,5,3,4,3,3,3), ncol = 4)
+data <- as.data.frame(data)
+SI1 <- 2
+SI2 <- 2
+SI <- c(SI1,SI2)
+b_jk <- matrix(c(0.5,0.5,0.5,0.5),nrow=2) 
+
+Ri(data, 7, b_jk, SI)
+```
+
+
+
