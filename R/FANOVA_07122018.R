@@ -64,9 +64,9 @@ Defuzz.FANOVA <- function(res, distance.type = "DSGD", i=1, j=1, theta = 1/3, th
   # START OF THE ALGORITHM
   ########################
   
-  if (class(res$MSTR) == "numeric"){stop("The decisions are already crisp! Defuzzification is not needed")}
+  if (inherits(res$MSTR, "numeric")){stop("The decisions are already crisp! Defuzzification is not needed")}
   
-  if (class(res$MSTR) != "PiecewiseLinearFuzzyNumber"){breakpoints <- nrow(res$MSTR) - 1}
+  if (!inherits(res$MSTR, "PiecewiseLinearFuzzyNumber")){breakpoints <- nrow(res$MSTR) - 1}
   
   def.F.MSTR <- distance(res$MSTR, TrapezoidalFuzzyNumber(0,0,0,0), type = distance.type, i=i, j=j, theta = theta,  thetas = thetas,  p=p, q=q, breakpoints = breakpoints)
   

@@ -14,138 +14,103 @@
 
 <title>On evaluations of linguistic questionnaires</title>
 
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
   }
 });
 </script>
+
 <style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
 </style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
-document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
 
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
 
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
-
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
-
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '') {
-      return null;
-    }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
-});
-</script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
-
-
-<style type="text/css">code{white-space: pre;}</style>
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
 <style type="text/css" data-origin="pandoc">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -154,13 +119,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -168,6 +140,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -363,89 +336,140 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">On evaluations of linguistic questionnaires</h1>
+<h1 class="title toc-ignore">On evaluations of linguistic
+questionnaires</h1>
 
 
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(FuzzySTs)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(FuzzySTs)</span></code></pre></div>
 <div id="adjusted.weight.si-calculates-the-adjusted-weight-for-a-given-sub-item-of-a-linguistic-questionnaire" class="section level2">
-<h2><code>adjusted.weight.SI()</code>: Calculates the adjusted weight for a given sub-item of a linguistic questionnaire</h2>
-<p>For a given observation, <code>FuzzySTs::adjusted.weight.SI()</code> calculates the adjusted weight of a sub-item of a linguistic questionnaire when non-response is present. This function re-distributes the weights on the non-missing answers. Counting the answers in a given sub-item can be done based on the functions <code>FuzzySTs::delta_jki()</code> and <code>FuzzySTs::Delta_jki()</code>. This function returns a numerical value giving the re-adjusted weight of the sub-item <em>k</em> of the considered main-item for the observation <em>i</em>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Simple example</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>data &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>), <span class="dt">ncol =</span> <span class="dv">4</span>)</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="kw">adjusted.weight.SI</span>(data, <span class="dv">7</span>, <span class="dv">1</span>, <span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>))</span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt; [1] 0.5</span></span></code></pre></div>
+<h2><code>adjusted.weight.SI()</code>: Calculates the adjusted weight
+for a given sub-item of a linguistic questionnaire</h2>
+<p>For a given observation, <code>FuzzySTs::adjusted.weight.SI()</code>
+calculates the adjusted weight of a sub-item of a linguistic
+questionnaire when non-response is present. This function re-distributes
+the weights on the non-missing answers. Counting the answers in a given
+sub-item can be done based on the functions
+<code>FuzzySTs::delta_jki()</code> and
+<code>FuzzySTs::Delta_jki()</code>. This function returns a numerical
+value giving the re-adjusted weight of the sub-item <em>k</em> of the
+considered main-item for the observation <em>i</em>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Simple example</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>), <span class="at">ncol =</span> <span class="dv">4</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">adjusted.weight.SI</span>(data, <span class="dv">7</span>, <span class="dv">1</span>, <span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>))</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; [1] 0.5</span></span></code></pre></div>
 </div>
 <div id="adjusted.weight.mi-calculates-the-adjusted-weight-for-a-given-main-item-of-a-linguistic-questionnaire" class="section level2">
-<h2><code>adjusted.weight.MI()</code>: Calculates the adjusted weight for a given main-item of a linguistic questionnaire</h2>
-<p>When non-response is present, <code>FuzzySTs::adjusted.weight.MI()</code> calculates the adjusted weight given to a main-item of a linguistic questionnaire related to a particular observation. This function re-distributes the weights based on the missing answers occuring in a given main-item. The calculation of the readjusted weight in a sub-item is done using the function <code>FuzzySTs::adjusted.weight.SI()</code>. For the inputs of this function, a decomposition by main-items and sub-items similar to the one described using the function <code>FuzzySTs::FUZZ()</code> or the function <code>FuzzySTs::IND.EVAL()</code> is needed. We remind that the membership functions should be called “MF” attached to the index of the main-item followed by the one of the sub-item i.e. the variable, and finally the index of the linguistic term. This function returns a numerical value giving the re-adjusted weight of the main-item <em>j</em> for the observation <em>i</em>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Calculation of a re-adjusted weight of the main-item 1 for the observation 9</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>data &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,</span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>), <span class="dt">ncol =</span> <span class="dv">4</span>)</span>
-<span id="cb3-4"><a href="#cb3-4"></a>data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(data)</span>
-<span id="cb3-5"><a href="#cb3-5"></a>MI &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co"># main-items</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a>SI1 &lt;-<span class="st"> </span><span class="dv">2</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a>SI2 &lt;-<span class="st"> </span><span class="dv">2</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a>SI &lt;-<span class="st"> </span><span class="kw">c</span>(SI1,SI2) <span class="co"># decomposition by sub-items</span></span>
-<span id="cb3-9"><a href="#cb3-9"></a>b_j &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>) <span class="co"># weights of main-items</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a>b_jk &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="dt">nrow=</span><span class="dv">2</span>) <span class="co"># weights of sub-items by main-items</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a>PA11 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 1 of the main-item 1</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a>PA12 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 2 of the main-item 1</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a>PA21 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 1 of the main-item 2</span></span>
-<span id="cb3-14"><a href="#cb3-14"></a>PA22 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 2 of the main-item 2</span></span>
-<span id="cb3-15"><a href="#cb3-15"></a></span>
-<span id="cb3-16"><a href="#cb3-16"></a><span class="co"># Fuzzification step</span></span>
-<span id="cb3-17"><a href="#cb3-17"></a><span class="co"># ------------------</span></span>
-<span id="cb3-18"><a href="#cb3-18"></a>MF111 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
-<span id="cb3-19"><a href="#cb3-19"></a>MF112 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
-<span id="cb3-20"><a href="#cb3-20"></a>MF113 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
-<span id="cb3-21"><a href="#cb3-21"></a>MF114 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
-<span id="cb3-22"><a href="#cb3-22"></a>MF115 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
-<span id="cb3-23"><a href="#cb3-23"></a>MF11 &lt;-<span class="st"> </span><span class="kw">GFUZZ</span>(data, <span class="dv">1</span>, <span class="dv">1</span>, PA11, <span class="dt">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="dt">breakpoints =</span> <span class="dv">100</span>)</span>
-<span id="cb3-24"><a href="#cb3-24"></a><span class="co"># ------------------</span></span>
-<span id="cb3-25"><a href="#cb3-25"></a>MF121 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
-<span id="cb3-26"><a href="#cb3-26"></a>MF122 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
-<span id="cb3-27"><a href="#cb3-27"></a>MF123 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
-<span id="cb3-28"><a href="#cb3-28"></a>MF124 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
-<span id="cb3-29"><a href="#cb3-29"></a>MF125 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
-<span id="cb3-30"><a href="#cb3-30"></a>MF12 &lt;-<span class="st"> </span><span class="kw">GFUZZ</span>(data, <span class="dv">1</span>, <span class="dv">2</span>, PA12, <span class="dt">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="dt">breakpoints =</span> <span class="dv">100</span>)</span>
-<span id="cb3-31"><a href="#cb3-31"></a><span class="co"># ------------------</span></span>
-<span id="cb3-32"><a href="#cb3-32"></a>MF211 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
-<span id="cb3-33"><a href="#cb3-33"></a>MF212 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
-<span id="cb3-34"><a href="#cb3-34"></a>MF213 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
-<span id="cb3-35"><a href="#cb3-35"></a>MF214 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
-<span id="cb3-36"><a href="#cb3-36"></a>MF215 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
-<span id="cb3-37"><a href="#cb3-37"></a>MF21 &lt;-<span class="st"> </span><span class="kw">GFUZZ</span>(data, <span class="dv">2</span>, <span class="dv">1</span>, PA21, <span class="dt">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="dt">breakpoints =</span> <span class="dv">100</span>)</span>
-<span id="cb3-38"><a href="#cb3-38"></a><span class="co"># ------------------</span></span>
-<span id="cb3-39"><a href="#cb3-39"></a>MF221 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
-<span id="cb3-40"><a href="#cb3-40"></a>MF222 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
-<span id="cb3-41"><a href="#cb3-41"></a>MF223 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
-<span id="cb3-42"><a href="#cb3-42"></a>MF224 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
-<span id="cb3-43"><a href="#cb3-43"></a>MF225 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
-<span id="cb3-44"><a href="#cb3-44"></a>MF22 &lt;-<span class="st"> </span><span class="kw">GFUZZ</span>(data, <span class="dv">2</span>, <span class="dv">2</span>, PA22, <span class="dt">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="dt">breakpoints =</span> <span class="dv">100</span>)</span>
-<span id="cb3-45"><a href="#cb3-45"></a><span class="co"># ------------------</span></span>
-<span id="cb3-46"><a href="#cb3-46"></a></span>
-<span id="cb3-47"><a href="#cb3-47"></a>range &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">28</span>), <span class="dt">ncol=</span><span class="dv">2</span>)</span>
-<span id="cb3-48"><a href="#cb3-48"></a><span class="kw">adjusted.weight.MI</span>(data, <span class="dv">9</span>, <span class="dv">1</span>, b_j, b_jk, SI)</span>
-<span id="cb3-49"><a href="#cb3-49"></a><span class="co">#&gt; [1] 0.5</span></span></code></pre></div>
+<h2><code>adjusted.weight.MI()</code>: Calculates the adjusted weight
+for a given main-item of a linguistic questionnaire</h2>
+<p>When non-response is present,
+<code>FuzzySTs::adjusted.weight.MI()</code> calculates the adjusted
+weight given to a main-item of a linguistic questionnaire related to a
+particular observation. This function re-distributes the weights based
+on the missing answers occuring in a given main-item. The calculation of
+the readjusted weight in a sub-item is done using the function
+<code>FuzzySTs::adjusted.weight.SI()</code>. For the inputs of this
+function, a decomposition by main-items and sub-items similar to the one
+described using the function <code>FuzzySTs::FUZZ()</code> or the
+function <code>FuzzySTs::IND.EVAL()</code> is needed. We remind that the
+membership functions should be called “MF” attached to the index of the
+main-item followed by the one of the sub-item i.e. the variable, and
+finally the index of the linguistic term. This function returns a
+numerical value giving the re-adjusted weight of the main-item
+<em>j</em> for the observation <em>i</em>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Calculation of a re-adjusted weight of the main-item 1 for the observation 9</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>), <span class="at">ncol =</span> <span class="dv">4</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(data)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>MI <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co"># main-items</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>SI1 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>SI2 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>SI <span class="ot">&lt;-</span> <span class="fu">c</span>(SI1,SI2) <span class="co"># decomposition by sub-items</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>b_j <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>,<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>) <span class="co"># weights of main-items</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>b_jk <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="at">nrow=</span><span class="dv">2</span>) <span class="co"># weights of sub-items by main-items</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>PA11 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 1 of the main-item 1</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>PA12 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 2 of the main-item 1</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>PA21 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 1 of the main-item 2</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>PA22 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 2 of the main-item 2</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co"># Fuzzification step</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>MF111 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>MF112 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>MF113 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>MF114 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>MF115 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>MF11 <span class="ot">&lt;-</span> <span class="fu">GFUZZ</span>(data, <span class="dv">1</span>, <span class="dv">1</span>, PA11, <span class="at">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="at">breakpoints =</span> <span class="dv">100</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>MF121 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a>MF122 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a>MF123 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a>MF124 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a>MF125 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a>MF12 <span class="ot">&lt;-</span> <span class="fu">GFUZZ</span>(data, <span class="dv">1</span>, <span class="dv">2</span>, PA12, <span class="at">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="at">breakpoints =</span> <span class="dv">100</span>)</span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a>MF211 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a>MF212 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a>MF213 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a>MF214 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a>MF215 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a>MF21 <span class="ot">&lt;-</span> <span class="fu">GFUZZ</span>(data, <span class="dv">2</span>, <span class="dv">1</span>, PA21, <span class="at">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="at">breakpoints =</span> <span class="dv">100</span>)</span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a>MF221 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a>MF222 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a>MF223 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a>MF224 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a>MF225 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a>MF22 <span class="ot">&lt;-</span> <span class="fu">GFUZZ</span>(data, <span class="dv">2</span>, <span class="dv">2</span>, PA22, <span class="at">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="at">breakpoints =</span> <span class="dv">100</span>)</span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a></span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a>range <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">28</span>), <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a><span class="fu">adjusted.weight.MI</span>(data, <span class="dv">9</span>, <span class="dv">1</span>, b_j, b_jk, SI)</span>
+<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a><span class="co">#&gt; [1] 0.5</span></span></code></pre></div>
 </div>
 <div id="ind.eval-calculates-the-individual-evaluations-of-a-linguistic-questionnaire" class="section level2">
-<h2><code>IND.EVAL()</code>: Calculates the individual evaluations of a linguistic questionnaire</h2>
-<p><code>FuzzySTs::IND.EVAL()</code> calculates the individual evaluations of a linguistic questionnaire. The user has to define the data set to be evaluated, and the decomposition of the linguistic questionnaire by main and sub-items. The related initial weights have to be defined as well. In addition, a distance has to be chosen from the family of distances used by the function <code>FuzzySTs::distance()</code>. Finally, the fuzzy numbers modelling the different linguistic terms should be given. The computations can be made using all types of fuzzy numbers. We add that the argument <code>spec = &quot;Identical&quot;</code> refers to the fact that every linguistic <span class="math inline">\(L_{q}\)</span> will be modelled by the identical fuzzy number across all the observations of the concerned variable. For the syntax to be used, each fuzzy linguistic should be called “MF” attached to the index of its main-item, followed by the index of its sub-item, and the one of the linguistic term, as explained in the description of the function <code>FuzzySTs::FUZZ()</code>. Let us recall the detailed decomposition of the modelling schema of the example of <code>FuzzySTs::FUZZ()</code>:</p>
-<p>Consider a data set composed by 5 linguistic variables. We expose the needed decomposition in main and sub-items. We propose to divide the data set into <span class="math inline">\(2\)</span> main-items as given in the following table. For each linguistic term of the considered variable, one has to choose a corresponding modelling fuzzy number. Suppose we want to model the linguistic <span class="math inline">\(L_{213}\)</span>, i.e. the third linguistic term of the first variable found in the second main-item, by a fuzzy number written as <span class="math inline">\(\tilde{L}_{213}\)</span>. Its membership function should then be expressed by MF213 as follows:</p>
+<h2><code>IND.EVAL()</code>: Calculates the individual evaluations of a
+linguistic questionnaire</h2>
+<p><code>FuzzySTs::IND.EVAL()</code> calculates the individual
+evaluations of a linguistic questionnaire. The user has to define the
+data set to be evaluated, and the decomposition of the linguistic
+questionnaire by main and sub-items. The related initial weights have to
+be defined as well. In addition, a distance has to be chosen from the
+family of distances used by the function
+<code>FuzzySTs::distance()</code>. Finally, the fuzzy numbers modelling
+the different linguistic terms should be given. The computations can be
+made using all types of fuzzy numbers. We add that the argument
+<code>spec = &quot;Identical&quot;</code> refers to the fact that every linguistic
+<span class="math inline">\(L_{q}\)</span> will be modelled by the
+identical fuzzy number across all the observations of the concerned
+variable. For the syntax to be used, each fuzzy linguistic should be
+called “MF” attached to the index of its main-item, followed by the
+index of its sub-item, and the one of the linguistic term, as explained
+in the description of the function <code>FuzzySTs::FUZZ()</code>. Let us
+recall the detailed decomposition of the modelling schema of the example
+of <code>FuzzySTs::FUZZ()</code>:</p>
+<p>Consider a data set composed by 5 linguistic variables. We expose the
+needed decomposition in main and sub-items. We propose to divide the
+data set into <span class="math inline">\(2\)</span> main-items as given
+in the following table. For each linguistic term of the considered
+variable, one has to choose a corresponding modelling fuzzy number.
+Suppose we want to model the linguistic <span class="math inline">\(L_{213}\)</span>, i.e. the third linguistic term
+of the first variable found in the second main-item, by a fuzzy number
+written as <span class="math inline">\(\tilde{L}_{213}\)</span>. Its
+membership function should then be expressed by MF213 as follows:</p>
 <table style="width:100%;">
 <colgroup>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -548,19 +572,28 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 </tbody>
 </table>
-<p>If the decomposition in main and sub-items is not required, it is then recommended to fix the index of the main-item to <span class="math inline">\(1\)</span>. Consequently, the index of the sub-item will be nothing but the column position of the variable in the architecture of the data set. For the same example previously described where the fourth variable has to be modelled by fuzzy numbers, suppose that no decomposition is desired, then the architecture becomes as seen in the following table. Therefore, the considered linguistic term <span class="math inline">\(L_{213}\)</span> of the previous example is now on called <span class="math inline">\(L_{143}\)</span> with its corresponding fuzzy number <span class="math inline">\(\tilde{L}_{143}\)</span>. Its membership function will afterwards be denoted by MF143 as given by:</p>
+<p>If the decomposition in main and sub-items is not required, it is
+then recommended to fix the index of the main-item to <span class="math inline">\(1\)</span>. Consequently, the index of the
+sub-item will be nothing but the column position of the variable in the
+architecture of the data set. For the same example previously described
+where the fourth variable has to be modelled by fuzzy numbers, suppose
+that no decomposition is desired, then the architecture becomes as seen
+in the following table. Therefore, the considered linguistic term <span class="math inline">\(L_{213}\)</span> of the previous example is now on
+called <span class="math inline">\(L_{143}\)</span> with its
+corresponding fuzzy number <span class="math inline">\(\tilde{L}_{143}\)</span>. Its membership function
+will afterwards be denoted by MF143 as given by:</p>
 <table style="width:100%;">
 <colgroup>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="10%"></col>
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -663,147 +696,186 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 </tbody>
 </table>
-<p>We have to mention that adding up the answers of a given linguistic are implemented as the functions <code>FuzzySTs::delta_jki</code> and <code>FuzzySTs::Delta_jki</code> respectively. In addition, if missingness occurs in the data set, we propose to readjust the weights of the main and sub-items. Practically, this task will be performed using the function <code>FuzzySTs::adjusted.weight.MI()</code> and <code>FuzzySTs::adjusted.weight.SI()</code>.</p>
-<p>Finally, this function returns the data set of individual evaluations, for which the number of observations is exactly the same as the initial data set.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Calculation the individual evaluations of the following data set </span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>data &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,</span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>), <span class="dt">ncol =</span> <span class="dv">4</span>)</span>
-<span id="cb4-4"><a href="#cb4-4"></a>data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(data)</span>
-<span id="cb4-5"><a href="#cb4-5"></a>MI &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co"># main-items</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>SI1 &lt;-<span class="st"> </span><span class="dv">2</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a>SI2 &lt;-<span class="st"> </span><span class="dv">2</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a>SI &lt;-<span class="st"> </span><span class="kw">c</span>(SI1,SI2) <span class="co"># decomposition by sub-items</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>b_j &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>) <span class="co"># weights of main-items</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a>b_jk &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="dt">nrow=</span><span class="dv">2</span>) <span class="co"># weights of sub-items by main-items</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a>PA11 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 1 of the main-item 1</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a>PA12 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 2 of the main-item 1</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a>PA21 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 1 of the main-item 2</span></span>
-<span id="cb4-14"><a href="#cb4-14"></a>PA22 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 2 of the main-item 2</span></span>
-<span id="cb4-15"><a href="#cb4-15"></a></span>
-<span id="cb4-16"><a href="#cb4-16"></a><span class="co"># Fuzzification step</span></span>
-<span id="cb4-17"><a href="#cb4-17"></a><span class="co"># ------------------</span></span>
-<span id="cb4-18"><a href="#cb4-18"></a>MF111 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
-<span id="cb4-19"><a href="#cb4-19"></a>MF112 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
-<span id="cb4-20"><a href="#cb4-20"></a>MF113 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
-<span id="cb4-21"><a href="#cb4-21"></a>MF114 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
-<span id="cb4-22"><a href="#cb4-22"></a>MF115 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
-<span id="cb4-23"><a href="#cb4-23"></a>MF11 &lt;-<span class="st"> </span><span class="kw">GFUZZ</span>(data, <span class="dv">1</span>, <span class="dv">1</span>, PA11, <span class="dt">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="dt">breakpoints =</span> <span class="dv">100</span>)</span>
-<span id="cb4-24"><a href="#cb4-24"></a><span class="co"># ------------------</span></span>
-<span id="cb4-25"><a href="#cb4-25"></a>MF121 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
-<span id="cb4-26"><a href="#cb4-26"></a>MF122 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
-<span id="cb4-27"><a href="#cb4-27"></a>MF123 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
-<span id="cb4-28"><a href="#cb4-28"></a>MF124 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
-<span id="cb4-29"><a href="#cb4-29"></a>MF125 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
-<span id="cb4-30"><a href="#cb4-30"></a>MF12 &lt;-<span class="st"> </span><span class="kw">GFUZZ</span>(data, <span class="dv">1</span>, <span class="dv">2</span>, PA12, <span class="dt">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="dt">breakpoints =</span> <span class="dv">100</span>)</span>
-<span id="cb4-31"><a href="#cb4-31"></a><span class="co"># ------------------</span></span>
-<span id="cb4-32"><a href="#cb4-32"></a>MF211 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
-<span id="cb4-33"><a href="#cb4-33"></a>MF212 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
-<span id="cb4-34"><a href="#cb4-34"></a>MF213 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
-<span id="cb4-35"><a href="#cb4-35"></a>MF214 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
-<span id="cb4-36"><a href="#cb4-36"></a>MF215 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
-<span id="cb4-37"><a href="#cb4-37"></a>MF21 &lt;-<span class="st"> </span><span class="kw">GFUZZ</span>(data, <span class="dv">2</span>, <span class="dv">1</span>, PA21, <span class="dt">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="dt">breakpoints =</span> <span class="dv">100</span>)</span>
-<span id="cb4-38"><a href="#cb4-38"></a><span class="co"># ------------------</span></span>
-<span id="cb4-39"><a href="#cb4-39"></a>MF221 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
-<span id="cb4-40"><a href="#cb4-40"></a>MF222 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
-<span id="cb4-41"><a href="#cb4-41"></a>MF223 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
-<span id="cb4-42"><a href="#cb4-42"></a>MF224 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
-<span id="cb4-43"><a href="#cb4-43"></a>MF225 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
-<span id="cb4-44"><a href="#cb4-44"></a>MF22 &lt;-<span class="st"> </span><span class="kw">GFUZZ</span>(data, <span class="dv">2</span>, <span class="dv">2</span>, PA22, <span class="dt">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="dt">breakpoints =</span> <span class="dv">100</span>)</span>
-<span id="cb4-45"><a href="#cb4-45"></a><span class="co"># ------------------</span></span>
-<span id="cb4-46"><a href="#cb4-46"></a></span>
-<span id="cb4-47"><a href="#cb4-47"></a>range &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">28</span>), <span class="dt">ncol=</span><span class="dv">2</span>)</span>
-<span id="cb4-48"><a href="#cb4-48"></a>ind.eval &lt;-<span class="st"> </span><span class="kw">IND.EVAL</span>(data,MI,b_j,SI,b_jk, <span class="dt">range =</span> range, <span class="dt">distance.type =</span><span class="st">&quot;DSGD.G&quot;</span>)</span>
-<span id="cb4-49"><a href="#cb4-49"></a><span class="kw">head</span>(ind.eval)</span>
-<span id="cb4-50"><a href="#cb4-50"></a><span class="co">#&gt; [1] 15.52417 22.48611 18.96555 13.74410 21.41515 13.74410</span></span></code></pre></div>
+<p>We have to mention that adding up the answers of a given linguistic
+are implemented as the functions <code>FuzzySTs::delta_jki</code> and
+<code>FuzzySTs::Delta_jki</code> respectively. In addition, if
+missingness occurs in the data set, we propose to readjust the weights
+of the main and sub-items. Practically, this task will be performed
+using the function <code>FuzzySTs::adjusted.weight.MI()</code> and
+<code>FuzzySTs::adjusted.weight.SI()</code>.</p>
+<p>Finally, this function returns the data set of individual
+evaluations, for which the number of observations is exactly the same as
+the initial data set.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Calculation the individual evaluations of the following data set </span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>), <span class="at">ncol =</span> <span class="dv">4</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(data)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>MI <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co"># main-items</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>SI1 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>SI2 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>SI <span class="ot">&lt;-</span> <span class="fu">c</span>(SI1,SI2) <span class="co"># decomposition by sub-items</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>b_j <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>,<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>) <span class="co"># weights of main-items</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>b_jk <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="at">nrow=</span><span class="dv">2</span>) <span class="co"># weights of sub-items by main-items</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>PA11 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 1 of the main-item 1</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>PA12 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 2 of the main-item 1</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>PA21 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 1 of the main-item 2</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>PA22 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 2 of the main-item 2</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co"># Fuzzification step</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>MF111 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>MF112 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>MF113 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>MF114 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>MF115 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>MF11 <span class="ot">&lt;-</span> <span class="fu">GFUZZ</span>(data, <span class="dv">1</span>, <span class="dv">1</span>, PA11, <span class="at">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="at">breakpoints =</span> <span class="dv">100</span>)</span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a>MF121 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>MF122 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a>MF123 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>MF124 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a>MF125 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a>MF12 <span class="ot">&lt;-</span> <span class="fu">GFUZZ</span>(data, <span class="dv">1</span>, <span class="dv">2</span>, PA12, <span class="at">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="at">breakpoints =</span> <span class="dv">100</span>)</span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a>MF211 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a>MF212 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
+<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a>MF213 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
+<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a>MF214 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
+<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a>MF215 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
+<span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a>MF21 <span class="ot">&lt;-</span> <span class="fu">GFUZZ</span>(data, <span class="dv">2</span>, <span class="dv">1</span>, PA21, <span class="at">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="at">breakpoints =</span> <span class="dv">100</span>)</span>
+<span id="cb4-38"><a href="#cb4-38" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb4-39"><a href="#cb4-39" tabindex="-1"></a>MF221 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
+<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a>MF222 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
+<span id="cb4-41"><a href="#cb4-41" tabindex="-1"></a>MF223 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
+<span id="cb4-42"><a href="#cb4-42" tabindex="-1"></a>MF224 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
+<span id="cb4-43"><a href="#cb4-43" tabindex="-1"></a>MF225 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
+<span id="cb4-44"><a href="#cb4-44" tabindex="-1"></a>MF22 <span class="ot">&lt;-</span> <span class="fu">GFUZZ</span>(data, <span class="dv">2</span>, <span class="dv">2</span>, PA22, <span class="at">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="at">breakpoints =</span> <span class="dv">100</span>)</span>
+<span id="cb4-45"><a href="#cb4-45" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb4-46"><a href="#cb4-46" tabindex="-1"></a></span>
+<span id="cb4-47"><a href="#cb4-47" tabindex="-1"></a>range <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">28</span>), <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb4-48"><a href="#cb4-48" tabindex="-1"></a>ind.eval <span class="ot">&lt;-</span> <span class="fu">IND.EVAL</span>(data,MI,b_j,SI,b_jk, <span class="at">range =</span> range, <span class="at">distance.type =</span><span class="st">&quot;DSGD.G&quot;</span>)</span>
+<span id="cb4-49"><a href="#cb4-49" tabindex="-1"></a><span class="fu">head</span>(ind.eval)</span>
+<span id="cb4-50"><a href="#cb4-50" tabindex="-1"></a><span class="co">#&gt; [1] 15.52417 22.48611 18.96555 13.74410 21.41515 13.74410</span></span></code></pre></div>
 </div>
 <div id="glob.eval-calculates-the-global-evaluation-of-a-linguistic-questionnaire" class="section level2">
-<h2><code>GLOB.EVAL()</code>: Calculates the global evaluation of a linguistic questionnaire</h2>
-<p><code>FuzzySTs::GLOB.EVAL()</code> calculates the global evaluation of a linguistic questionnaire. The arguments of this function, i.e. the decomposition by main and sub-items, are similar to the ones of the function <code>FuzzySTs::IND.EVAL()</code>.</p>
-<p>We have to remind that under the assumption of non-missingness, the global evaluation is the weighted mean of the set of individual evaluations resulting from the function <code>FuzzySTs::IND.EVAL()</code>. Thus, one can get the global evaluation using the basic function <code>stats::Weighted.mean()</code>. Nevertheless, we introduce a function <code>FuzzySTs::GLOB.EVAL.mean (ind.eval, p_ind)</code> applied on the vector of individual evaluations called <code>ind.eval</code> with the vector of weights denoted by <code>p_ind</code>. We add that if no sampling weights are applied, the argument <code>p_ind</code> is set to be <code>p_ind=rep(1, length(ind.eval))</code>. Note that <code>FuzzySTs::GLOB.EVAL()</code> returns a numerical value representing the global evaluation of the linguistic questionnaire.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Calculation of the global evaluation of the following data set</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>data &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,</span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>), <span class="dt">ncol =</span> <span class="dv">4</span>)</span>
-<span id="cb5-4"><a href="#cb5-4"></a>data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(data)</span>
-<span id="cb5-5"><a href="#cb5-5"></a>MI &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co"># main-items</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>SI1 &lt;-<span class="st"> </span><span class="dv">2</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a>SI2 &lt;-<span class="st"> </span><span class="dv">2</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a>SI &lt;-<span class="st"> </span><span class="kw">c</span>(SI1,SI2) <span class="co"># decomposition by sub-items</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a>b_j &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>) <span class="co"># weights of main-items</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a>b_jk &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="dt">nrow=</span><span class="dv">2</span>) <span class="co"># weights of sub-items by main-items</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a>PA11 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 1 of the main-item 1</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a>PA12 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 2 of the main-item 1</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a>PA21 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 1 of the main-item 2</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a>PA22 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 2 of the main-item 2</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a></span>
-<span id="cb5-16"><a href="#cb5-16"></a><span class="co"># Fuzzification step</span></span>
-<span id="cb5-17"><a href="#cb5-17"></a><span class="co"># ------------------</span></span>
-<span id="cb5-18"><a href="#cb5-18"></a>MF111 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
-<span id="cb5-19"><a href="#cb5-19"></a>MF112 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
-<span id="cb5-20"><a href="#cb5-20"></a>MF113 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
-<span id="cb5-21"><a href="#cb5-21"></a>MF114 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
-<span id="cb5-22"><a href="#cb5-22"></a>MF115 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
-<span id="cb5-23"><a href="#cb5-23"></a>MF11 &lt;-<span class="st"> </span><span class="kw">GFUZZ</span>(data, <span class="dv">1</span>, <span class="dv">1</span>, PA11, <span class="dt">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="dt">breakpoints =</span> <span class="dv">100</span>)</span>
-<span id="cb5-24"><a href="#cb5-24"></a><span class="co"># ------------------</span></span>
-<span id="cb5-25"><a href="#cb5-25"></a>MF121 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
-<span id="cb5-26"><a href="#cb5-26"></a>MF122 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
-<span id="cb5-27"><a href="#cb5-27"></a>MF123 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
-<span id="cb5-28"><a href="#cb5-28"></a>MF124 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
-<span id="cb5-29"><a href="#cb5-29"></a>MF125 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
-<span id="cb5-30"><a href="#cb5-30"></a>MF12 &lt;-<span class="st"> </span><span class="kw">GFUZZ</span>(data, <span class="dv">1</span>, <span class="dv">2</span>, PA12, <span class="dt">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="dt">breakpoints =</span> <span class="dv">100</span>)</span>
-<span id="cb5-31"><a href="#cb5-31"></a><span class="co"># ------------------</span></span>
-<span id="cb5-32"><a href="#cb5-32"></a>MF211 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
-<span id="cb5-33"><a href="#cb5-33"></a>MF212 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
-<span id="cb5-34"><a href="#cb5-34"></a>MF213 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
-<span id="cb5-35"><a href="#cb5-35"></a>MF214 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
-<span id="cb5-36"><a href="#cb5-36"></a>MF215 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
-<span id="cb5-37"><a href="#cb5-37"></a>MF21 &lt;-<span class="st"> </span><span class="kw">GFUZZ</span>(data, <span class="dv">2</span>, <span class="dv">1</span>, PA21, <span class="dt">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="dt">breakpoints =</span> <span class="dv">100</span>)</span>
-<span id="cb5-38"><a href="#cb5-38"></a><span class="co"># ------------------</span></span>
-<span id="cb5-39"><a href="#cb5-39"></a>MF221 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
-<span id="cb5-40"><a href="#cb5-40"></a>MF222 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
-<span id="cb5-41"><a href="#cb5-41"></a>MF223 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
-<span id="cb5-42"><a href="#cb5-42"></a>MF224 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
-<span id="cb5-43"><a href="#cb5-43"></a>MF225 &lt;-<span class="st"> </span><span class="kw">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
-<span id="cb5-44"><a href="#cb5-44"></a>MF22 &lt;-<span class="st"> </span><span class="kw">GFUZZ</span>(data, <span class="dv">2</span>, <span class="dv">2</span>, PA22, <span class="dt">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="dt">breakpoints =</span> <span class="dv">100</span>)</span>
-<span id="cb5-45"><a href="#cb5-45"></a><span class="co"># ------------------</span></span>
-<span id="cb5-46"><a href="#cb5-46"></a></span>
-<span id="cb5-47"><a href="#cb5-47"></a>range &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">28</span>), <span class="dt">ncol=</span><span class="dv">2</span>)</span>
-<span id="cb5-48"><a href="#cb5-48"></a>ind.eval &lt;-<span class="st"> </span><span class="kw">IND.EVAL</span>(data,MI,b_j,SI,b_jk, <span class="dt">range =</span> range, <span class="dt">distance.type =</span><span class="st">&quot;DSGD.G&quot;</span>)</span>
-<span id="cb5-49"><a href="#cb5-49"></a></span>
-<span id="cb5-50"><a href="#cb5-50"></a>(GLOB &lt;-<span class="st"> </span><span class="kw">GLOB.EVAL</span>(data, MI, b_j, SI, b_jk, <span class="dt">distance.type =</span><span class="st">&quot;GSGD&quot;</span>))</span>
-<span id="cb5-51"><a href="#cb5-51"></a><span class="co">#&gt; [1] 17.84188</span></span>
-<span id="cb5-52"><a href="#cb5-52"></a>(GLOB.mean &lt;-<span class="st"> </span><span class="kw">GLOB.EVAL.mean</span>(ind.eval))</span>
-<span id="cb5-53"><a href="#cb5-53"></a><span class="co">#&gt; [1] 17.84188</span></span></code></pre></div>
+<h2><code>GLOB.EVAL()</code>: Calculates the global evaluation of a
+linguistic questionnaire</h2>
+<p><code>FuzzySTs::GLOB.EVAL()</code> calculates the global evaluation
+of a linguistic questionnaire. The arguments of this function, i.e. the
+decomposition by main and sub-items, are similar to the ones of the
+function <code>FuzzySTs::IND.EVAL()</code>.</p>
+<p>We have to remind that under the assumption of non-missingness, the
+global evaluation is the weighted mean of the set of individual
+evaluations resulting from the function
+<code>FuzzySTs::IND.EVAL()</code>. Thus, one can get the global
+evaluation using the basic function <code>stats::Weighted.mean()</code>.
+Nevertheless, we introduce a function
+<code>FuzzySTs::GLOB.EVAL.mean (ind.eval, p_ind)</code> applied on the
+vector of individual evaluations called <code>ind.eval</code> with the
+vector of weights denoted by <code>p_ind</code>. We add that if no
+sampling weights are applied, the argument <code>p_ind</code> is set to
+be <code>p_ind=rep(1, length(ind.eval))</code>. Note that
+<code>FuzzySTs::GLOB.EVAL()</code> returns a numerical value
+representing the global evaluation of the linguistic questionnaire.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Calculation of the global evaluation of the following data set</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>), <span class="at">ncol =</span> <span class="dv">4</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(data)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>MI <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co"># main-items</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>SI1 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>SI2 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>SI <span class="ot">&lt;-</span> <span class="fu">c</span>(SI1,SI2) <span class="co"># decomposition by sub-items</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>b_j <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>,<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>) <span class="co"># weights of main-items</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>b_jk <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="at">nrow=</span><span class="dv">2</span>) <span class="co"># weights of sub-items by main-items</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>PA11 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 1 of the main-item 1</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>PA12 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 2 of the main-item 1</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>PA21 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 1 of the main-item 2</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>PA22 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>) <span class="co"># possible answers for the sub-item 2 of the main-item 2</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co"># Fuzzification step</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>MF111 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>MF112 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>MF113 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>MF114 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>MF115 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>MF11 <span class="ot">&lt;-</span> <span class="fu">GFUZZ</span>(data, <span class="dv">1</span>, <span class="dv">1</span>, PA11, <span class="at">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="at">breakpoints =</span> <span class="dv">100</span>)</span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a>MF121 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a>MF122 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>MF123 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a>MF124 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a>MF125 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a>MF12 <span class="ot">&lt;-</span> <span class="fu">GFUZZ</span>(data, <span class="dv">1</span>, <span class="dv">2</span>, PA12, <span class="at">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="at">breakpoints =</span> <span class="dv">100</span>)</span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a>MF211 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
+<span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a>MF212 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
+<span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a>MF213 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
+<span id="cb5-35"><a href="#cb5-35" tabindex="-1"></a>MF214 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
+<span id="cb5-36"><a href="#cb5-36" tabindex="-1"></a>MF215 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
+<span id="cb5-37"><a href="#cb5-37" tabindex="-1"></a>MF21 <span class="ot">&lt;-</span> <span class="fu">GFUZZ</span>(data, <span class="dv">2</span>, <span class="dv">1</span>, PA21, <span class="at">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="at">breakpoints =</span> <span class="dv">100</span>)</span>
+<span id="cb5-38"><a href="#cb5-38" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb5-39"><a href="#cb5-39" tabindex="-1"></a>MF221 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">7</span>)</span>
+<span id="cb5-40"><a href="#cb5-40" tabindex="-1"></a>MF222 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">15</span>)</span>
+<span id="cb5-41"><a href="#cb5-41" tabindex="-1"></a>MF223 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">7</span>,<span class="dv">15</span>,<span class="dv">15</span>,<span class="dv">23</span>)</span>
+<span id="cb5-42"><a href="#cb5-42" tabindex="-1"></a>MF224 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">15</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">28</span>)</span>
+<span id="cb5-43"><a href="#cb5-43" tabindex="-1"></a>MF225 <span class="ot">&lt;-</span> <span class="fu">TrapezoidalFuzzyNumber</span>(<span class="dv">23</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">30</span>)</span>
+<span id="cb5-44"><a href="#cb5-44" tabindex="-1"></a>MF22 <span class="ot">&lt;-</span> <span class="fu">GFUZZ</span>(data, <span class="dv">2</span>, <span class="dv">2</span>, PA22, <span class="at">spec=</span><span class="st">&quot;Identical&quot;</span>, <span class="at">breakpoints =</span> <span class="dv">100</span>)</span>
+<span id="cb5-45"><a href="#cb5-45" tabindex="-1"></a><span class="co"># ------------------</span></span>
+<span id="cb5-46"><a href="#cb5-46" tabindex="-1"></a></span>
+<span id="cb5-47"><a href="#cb5-47" tabindex="-1"></a>range <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">28</span>), <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb5-48"><a href="#cb5-48" tabindex="-1"></a>ind.eval <span class="ot">&lt;-</span> <span class="fu">IND.EVAL</span>(data,MI,b_j,SI,b_jk, <span class="at">range =</span> range, <span class="at">distance.type =</span><span class="st">&quot;DSGD.G&quot;</span>)</span>
+<span id="cb5-49"><a href="#cb5-49" tabindex="-1"></a></span>
+<span id="cb5-50"><a href="#cb5-50" tabindex="-1"></a>(GLOB <span class="ot">&lt;-</span> <span class="fu">GLOB.EVAL</span>(data, MI, b_j, SI, b_jk, <span class="at">distance.type =</span><span class="st">&quot;GSGD&quot;</span>))</span>
+<span id="cb5-51"><a href="#cb5-51" tabindex="-1"></a><span class="co">#&gt; [1] 17.84188</span></span>
+<span id="cb5-52"><a href="#cb5-52" tabindex="-1"></a>(GLOB.mean <span class="ot">&lt;-</span> <span class="fu">GLOB.EVAL.mean</span>(ind.eval))</span>
+<span id="cb5-53"><a href="#cb5-53" tabindex="-1"></a><span class="co">#&gt; [1] 17.84188</span></span></code></pre></div>
 </div>
 <div id="r-calculates-the-indicator-of-informations-rate-of-the-data-base" class="section level2">
-<h2><code>R()</code>: Calculates the indicator of information’s rate of the data base</h2>
-<p><code>FuzzySTs::R()</code> calculates the indicator of information’s rate of the complete data base. This computation uses the functions <code>FuzzySTs::adjusted.weight.SI()</code> and <code>FuzzySTs::Delta_jki()</code>. The function <code>FuzzySTs::R()</code> returns a numerical value, interpreted as the more it tends to the value <span class="math inline">\(1\)</span>, the less the complete questionnaire contains missing values.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Calculation of the indicator of information&#39;s rate - complete data set</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>data &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,</span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>), <span class="dt">ncol =</span> <span class="dv">4</span>)</span>
-<span id="cb6-4"><a href="#cb6-4"></a>data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(data)</span>
-<span id="cb6-5"><a href="#cb6-5"></a>p_ind &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.1</span>,<span class="fl">0.05</span>,<span class="fl">0.05</span>,<span class="fl">0.2</span>,<span class="fl">0.1</span>,<span class="fl">0.05</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.2</span>,<span class="fl">0.05</span>) <span class="co"># Observations&#39; weights</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a>SI1 &lt;-<span class="st"> </span><span class="dv">2</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a>SI2 &lt;-<span class="st"> </span><span class="dv">2</span></span>
-<span id="cb6-8"><a href="#cb6-8"></a>SI &lt;-<span class="st"> </span><span class="kw">c</span>(SI1,SI2)</span>
-<span id="cb6-9"><a href="#cb6-9"></a>b_jk &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="dt">nrow=</span><span class="dv">2</span>) </span>
-<span id="cb6-10"><a href="#cb6-10"></a></span>
-<span id="cb6-11"><a href="#cb6-11"></a><span class="kw">R</span>(data, p_ind, b_jk, SI)</span>
-<span id="cb6-12"><a href="#cb6-12"></a><span class="co">#&gt; [1] 1</span></span></code></pre></div>
+<h2><code>R()</code>: Calculates the indicator of information’s rate of
+the data base</h2>
+<p><code>FuzzySTs::R()</code> calculates the indicator of information’s
+rate of the complete data base. This computation uses the functions
+<code>FuzzySTs::adjusted.weight.SI()</code> and
+<code>FuzzySTs::Delta_jki()</code>. The function
+<code>FuzzySTs::R()</code> returns a numerical value, interpreted as the
+more it tends to the value <span class="math inline">\(1\)</span>, the
+less the complete questionnaire contains missing values.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Calculation of the indicator of information&#39;s rate - complete data set</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>), <span class="at">ncol =</span> <span class="dv">4</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(data)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>p_ind <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.1</span>,<span class="fl">0.05</span>,<span class="fl">0.05</span>,<span class="fl">0.2</span>,<span class="fl">0.1</span>,<span class="fl">0.05</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.2</span>,<span class="fl">0.05</span>) <span class="co"># Observations&#39; weights</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>SI1 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>SI2 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>SI <span class="ot">&lt;-</span> <span class="fu">c</span>(SI1,SI2)</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>b_jk <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="at">nrow=</span><span class="dv">2</span>) </span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="fu">R</span>(data, p_ind, b_jk, SI)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span></code></pre></div>
 </div>
 <div id="ri-calculates-the-indicator-of-informations-rate-of-the-data-base-for-a-given-unit" class="section level2">
-<h2><code>Ri()</code>: Calculates the indicator of information’s rate of the data base for a given unit</h2>
-<p><code>FuzzySTs::Ri()</code> calculates the indicator of information’s rate of the complete data base for a given unit. This computation uses the functions <code>FuzzySTs::adjusted.weight.SI()</code> and <code>FuzzySTs::Delta_jki()</code>. The function <code>FuzzySTs::Ri()</code> returns a numerical value related to a particular observation. This value is interpreted as the more it tends to the value <span class="math inline">\(1\)</span>, the less the complete questionnaire contains missing values.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Calculation of the indicator of information&#39;s rate for the unit 7</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>data &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,</span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>), <span class="dt">ncol =</span> <span class="dv">4</span>)</span>
-<span id="cb7-4"><a href="#cb7-4"></a>data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(data)</span>
-<span id="cb7-5"><a href="#cb7-5"></a>SI1 &lt;-<span class="st"> </span><span class="dv">2</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a>SI2 &lt;-<span class="st"> </span><span class="dv">2</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a>SI &lt;-<span class="st"> </span><span class="kw">c</span>(SI1,SI2)</span>
-<span id="cb7-8"><a href="#cb7-8"></a>b_jk &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="dt">nrow=</span><span class="dv">2</span>) </span>
-<span id="cb7-9"><a href="#cb7-9"></a></span>
-<span id="cb7-10"><a href="#cb7-10"></a><span class="kw">Ri</span>(data, <span class="dv">7</span>, b_jk, SI)</span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="co">#&gt; [1] 1</span></span></code></pre></div>
+<h2><code>Ri()</code>: Calculates the indicator of information’s rate of
+the data base for a given unit</h2>
+<p><code>FuzzySTs::Ri()</code> calculates the indicator of information’s
+rate of the complete data base for a given unit. This computation uses
+the functions <code>FuzzySTs::adjusted.weight.SI()</code> and
+<code>FuzzySTs::Delta_jki()</code>. The function
+<code>FuzzySTs::Ri()</code> returns a numerical value related to a
+particular observation. This value is interpreted as the more it tends
+to the value <span class="math inline">\(1\)</span>, the less the
+complete questionnaire contains missing values.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Calculation of the indicator of information&#39;s rate for the unit 7</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>), <span class="at">ncol =</span> <span class="dv">4</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(data)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>SI1 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>SI2 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>SI <span class="ot">&lt;-</span> <span class="fu">c</span>(SI1,SI2)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>b_jk <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>),<span class="at">nrow=</span><span class="dv">2</span>) </span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="fu">Ri</span>(data, <span class="dv">7</span>, b_jk, SI)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span></code></pre></div>
 </div>
 
 
