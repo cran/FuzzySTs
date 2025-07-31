@@ -1,6 +1,6 @@
-FuzzySTs v0.3 (Release date: 2024-07-05)
+FuzzySTs v0.4 (Release date: 2025-07-31)
 ==============
 
 Changes:
 
-* Changes to if conditions in FANOVA() and Defuzz.FANOVA() to reduce running time.
+* Addition of functions, and improvement of description of some functions.

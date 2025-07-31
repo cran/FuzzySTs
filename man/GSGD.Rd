@@ -2,7 +2,7 @@
 % Please edit documentation in R/Distances_17102018.R
 \name{GSGD}
 \alias{GSGD}
-\title{Calculates a distance between fuzzy numbers}
+\title{Calculates the generalized signed distance between fuzzy numbers}
 \usage{
 GSGD(X, Y, i = 1, j = 1, thetas = 1, breakpoints = 100)
 }
@@ -23,5 +23,5 @@ GSGD(X, Y, i = 1, j = 1, thetas = 1, breakpoints = 100)
 A numerical value.
 }
 \description{
-Calculates a distance between fuzzy numbers
+Calculates the generalized signed distance between fuzzy numbers
 }

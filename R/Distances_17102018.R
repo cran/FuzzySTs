@@ -360,7 +360,7 @@ DSGD.G <- function(X,Y, i=1, j=1, thetas = 1, breakpoints = 100){ # The generali
 }
 
  
-#' Calculates a distance between fuzzy numbers
+#' Calculates the generalized signed distance between fuzzy numbers
 #' @param X a fuzzy number.
 #' @param Y a fuzzy number.
 #' @param i parameter of the density function of the Beta distribution, fixed by default to i = 1.
@@ -380,7 +380,7 @@ GSGD <- function(X,Y, i=1, j=1, thetas = 1, breakpoints = 100){ # The generalize
 }
 
  
-#' Calculates a distance between fuzzy numbers
+#' Calculates a distance between fuzzy numbers according to the chosen type
 #' @param X a fuzzy number.
 #' @param Y a fuzzy number.
 #' @param type type of distance chosen from the family of distances. The different choices are given by: "Rho1", "Rho2", "Bertoluzza", "Rhop", "Delta.pq", "Mid/Spr", "wabl", "DSGD", "DSGD.G", "GSGD".
@@ -418,6 +418,48 @@ distance <- function (X,Y, type, i=1, j=1, theta = 1/3, thetas = 1, p=2, q=0.5, 
 
 
 
+#' Calculates the optimal distance between two fuzzy numbers according to the chosen type
+#' @param X a fuzzy number.
+#' @param Y a fuzzy number.
+#' @param type type of distance chosen from the family of distances. The different choices are given by: "Rho1", "Rho2", "Bertoluzza", "Rhop", "Delta.pq", "Mid/Spr", "wabl", "DSGD", "DSGD.G", "GSGD".
+#' @param i parameter of the density function of the Beta distribution, fixed by default to i = 1.
+#' @param j parameter of the density function of the Beta distribution, fixed by default to j = 1.
+#' @param theta a numerical value between 0 and 1, representing a weighting parameter. By default, theta is fixed to 1/3 referring to the Lebesgue space. This measure is used in the calculations of the following distances: d_Bertoluzza, d_mid/spr and d_phi-wabl/ldev/rdev.
+#' @param thetas a decimal value between 0 and 1, representing the weight given to the shape of the fuzzy number. By default, thetas is fixed to 1. This parameter is used in the calculations of the d_theta star and the d_GSGD distances.
+#' @param p a positive integer such that 1 \eqn{\le} p < infinity, referring to the parameter of the Rho_p and Delta_pq.
+#' @param q a decimal value between 0 and 1, referring to the parameter of the metric Delta_pq.
+#' @param breakpoints a positive arbitrary integer representing the number of breaks chosen to build the numerical alpha-cuts. It is fixed to 100 by default.
+#' @return A numerical value.
+#' @export
+#' @examples X <- TrapezoidalFuzzyNumber(1,2,3,4) 
+#' Y <- TrapezoidalFuzzyNumber(4,5,6,7) 
+#' optimal.distance(X, Y, type = "GSGD")
+#' optimal.distance(X, Y, type = "Bertoluzza")
+
+optimal.distance <- function(X, Y, type="DSGD.G", i=1, j=1, theta = 1/3, thetas = 1, p = 2,q = 0.5, breakpoints = 100){
+  
+  u <- c("DSGD", "Mid.Spr", "Bertoluzza", "wabl", "D2", "Rho1", "Rho2","DSGD.G", "GSGD")
+  if(type %in% u == TRUE){
+
+      if (distance(X=X, Y=Y, type="DSGD") <0){
+        tratio <- max(supp(X))-min(supp(Y))
+        tY <- TrapezoidalFuzzyNumber(supp(Y)[1]+tratio, core(Y)[1]+tratio, core(Y)[2]+tratio, supp(Y)[2]+tratio)
+        res <- distance(X=X, Y=tY, type=type)
+      } else if (distance(X=X, Y=Y, type="DSGD") >0 ){
+        tratio <- max(supp(X))-min(supp(Y))
+        tX <- TrapezoidalFuzzyNumber(supp(X)[1]+tratio, core(X)[1]+tratio, core(X)[2]+tratio, supp(X)[2]+tratio)
+        res <- distance(X=tX, Y=Y, type=type)
+      } else{
+        res <- 0
+      }
+      
+      return(res)
+        
+  } else {
+    print("Type of distance required!")
+  }
+    
+}
 
 
 
